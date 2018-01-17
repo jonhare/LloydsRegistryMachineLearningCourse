@@ -54,21 +54,21 @@ Also relevant: https://www.youtube.com/watch?v=g0TaYhjpOfo
       * Graphical Models, LDA, MCMC
     * Homework
 - Deep Learning
-+ Leader: Dr Jonathon Hare
-+ Topics Covered:
-  * Why Deep
-  * CNNs
-  * RNNs (LSTM, etc.)
-  * GPU programming (libraries)
-  * Keras tutorial
-  * Homework
+  + Leader: Dr Jonathon Hare
+  + Topics Covered:
+    * Why Deep
+    * CNNs
+    * RNNs (LSTM, etc.)
+    * GPU programming (libraries)
+    * Keras tutorial
+    * Homework
 - Practical Machine Learning
-+ Leaders: Prof Niranjan, Prof Prugel-Bennett and Dr Hare
-  * Workshop on data you provide
-  * We will look at:
-    * Analyse the problem
-    * Visualise the data
-    * Cleaning the data
-    * Using machine learning libraries
-    * Evaluate performance
+  + Leaders: Prof Niranjan, Prof Prugel-Bennett and Dr Hare
+    * Workshop on data you provide
+    * We will look at:
+      * Analyse the problem
+      * Visualise the data
+      * Cleaning the data
+      * Using machine learning libraries
+      * Evaluate performance
     
