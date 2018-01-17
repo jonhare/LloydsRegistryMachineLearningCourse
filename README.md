@@ -4,9 +4,11 @@ Notes, demos and materials for learning Machine Learning
 
 ## Video Links
 Here’s Minsky talking about tank recognition: https://www.youtube.com/watch?v=3JjDmFV_YwQ
+
 Interestingly he also talked about counting - https://www.youtube.com/watch?v=QW_srPO-LrI
 
 Re the DARPA Grand Challenge:
+
 "The first competition of the DARPA Grand Challenge was held on March 13, 2004 in the Mojave Desert region of the United States, along a 150-mile (240 km) route that follows along the path of Interstate 15 from just before Barstow, California to just past the California–Nevada border in Primm. None of the robot vehicles finished the route. Carnegie Mellon University's Red Team and car Sandstorm (a converted Humvee) traveled the farthest distance, completing 11.78 km (7.32 mi) of the course before getting hung up on a rock after making a switchback turn. No winner was declared, and the cash prize was not given. Therefore, a second DARPA Grand Challenge event was scheduled for 2005.”
 
 https://www.youtube.com/watch?v=wTDG5gjwPGo
