@@ -27,7 +27,7 @@ You'll need access to a computer with the following installed:
 
 The easiest way to install all of these together is with [Anaconda](https://www.continuum.io/downloads) (Windows, Mac & Linux installers available).
 
-Finally, you'll need the datasets we'll be using - you can download this from [https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/data.zip][https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/data.zip].
+Finally, you'll need the datasets we'll be using - you can download this from https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/data.zip.
 
 ## A data set for experimentation
 
@@ -322,7 +322,7 @@ Thie means we achieved a 77.2% accuracy. Let's see if we can do better with a li
 
 ---------------------------------------
 
-> **Note:** in the above code we're using a `SGDClassifier`. The `SGDClassifier` is a special type of classifier that performs an optimisation process called Stochastic Gradient Descent to minimise the error or loss function. When we use Hinge Loss (`loss='hinge'`) the objective function is equivalent to a Support Vector Machine. The penalty term (`penalty='l2'`) applies an *l2 regulariser* to the optimiser; this has the effect of constraining the magnitudes of the values being optimised. The strength of this regulariser is controlled by the `alpha` parameter. We'll talk more about Support Vector Machines, regularisation and gradient methods later in the week. You should also know that scikit-learn has many other implementations of linear Support Vector Machines (as well as non-linear or Kernel SVMs), which use different mechanisms for optimising the solution (see [http://scikit-learn.org/stable/modules/svm.html#svm](http://scikit-learn.org/stable/modules/svm.html#svm)). The `SGDClassifier` is a good choice for large-scale problems because it uses less memory than the `LinearSVC` (Linear Support Vector Classifier) class.
+> **Note:** In the above code we're using a `SGDClassifier`. The `SGDClassifier` is a special type of classifier that performs an optimisation process called Stochastic Gradient Descent to minimise the error or loss function. When we use Hinge Loss (`loss='hinge'`) the objective function is equivalent to a Support Vector Machine. The penalty term (`penalty='l2'`) applies an *l2 regulariser* to the optimiser; this has the effect of constraining the magnitudes of the values being optimised. The strength of this regulariser is controlled by the `alpha` parameter. We'll talk more about Support Vector Machines, regularisation and gradient methods later in the week. You should also know that scikit-learn has many other implementations of linear Support Vector Machines (as well as non-linear or Kernel SVMs), which use different mechanisms for optimising the solution (see [http://scikit-learn.org/stable/modules/svm.html#svm](http://scikit-learn.org/stable/modules/svm.html#svm)). The `SGDClassifier` is a good choice for large-scale problems because it uses less memory than the `LinearSVC` (Linear Support Vector Classifier) class.
 
 ---------------------------------------
 
