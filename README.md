@@ -4,6 +4,7 @@ Notes, demos and materials for learning Machine Learning
 
 ## Video Links
 Here’s Minsky talking about tank recognition: https://www.youtube.com/watch?v=3JjDmFV_YwQ
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3JjDmFV_YwQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Interestingly he also talked about counting - https://www.youtube.com/watch?v=QW_srPO-LrI
 
