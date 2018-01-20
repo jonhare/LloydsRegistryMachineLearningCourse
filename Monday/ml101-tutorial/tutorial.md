@@ -3,7 +3,7 @@
 # Hands-on Machine Learning 101
 
 ## Introduction and Acknowledgements
-This tutorial is largely based on the official ["Working With Text Data" scikit-learn tutorial](http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html). A number of changes have been made to ensure that it fits the format of our machine learning course, and we've added additional bits that demonstrate how to cluster data with k-means.
+This tutorial is largely based on the official ["Working With Text Data" scikit-learn tutorial](http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html). A number of changes have been made to ensure that it fits the format of our machine learning course, and we've added additional bits that demonstrate how to cluster data with k-means which will give a greater understanding of the datasets we're using.
 
 Through this tutorial you'll learn how to:
 
@@ -13,19 +13,21 @@ Through this tutorial you'll learn how to:
 * Train a classifier to that predicts what newsgroup a post belongs to
 * Use a grid search strategy to find a good configuration of both the feature extraction components and the classifier
 
+In the follow-up exercises you'll apply what you've learned to two different problems on different datasets.
+
 ## Prerequisites
 To use this tutorial you'll use the Python 3 language with the `scikit-learn` package to perform feature extraction, clustering and classification tasks. `scikit-learn` is an open-source package containing a number of simple and efficient tools for data mining and data analysis in the Python language.
 
 You'll need access to a computer with the following installed:
 
-- `Python` (> 3.5)
-- `NumPy` (>= 1.6.1)
-- `SciPy` (>= 0.9)
-- `scikit-learn` (>= 0.17.0)
+- `Python` (> 3.6)
+- `NumPy` (>= 1.13.3)
+- `SciPy` (>= 0.19.1)
+- `scikit-learn` (>= 0.19.1)
 
 The easiest way to install all of these together is with [Anaconda](https://www.continuum.io/downloads) (Windows, Mac & Linux installers available).
 
-Finally, you'll need the data set we'll be using and skeleton solutions to the exercises. If you've borrowed a laptop from us, then you can find these on the desktop in the `WAIS-ML101/sklearn-tutorial` folder. If you're using your own laptop, then you can copy this off the memory sticks we've provided, or you can clone it from GitHub using: `git clone https://github.com/jonhare/WAIS-ML101.git`
+Finally, you'll need the datasets we'll be using - you can download this from [https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/data.zip][https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/data.zip].
 
 ## A data set for experimentation
 
@@ -33,9 +35,9 @@ For the purposes of this tutorial we're going to play with a dataset of internet
 
 > The 20 Newsgroups data set is a collection of approximately 20,000 newsgroup documents, partitioned (nearly) evenly across 20 different newsgroups. To the best of our knowledge, it was originally collected by Ken Lang, probably for his paper "Newsweeder: Learning to filter netnews," though he does not explicitly mention this collection. The 20 newsgroups collection has become a popular data set for experiments in text applications of machine learning techniques, such as text classification and text clustering.
 
-Start by navigating to the `WAIS-ML101/sklearn-tutorial/data/twenty_newsgroups` folder and look at how the data set is structured. There are two folders - one with data for training models, and one for testing how well a model works. Within each of the training and testing folders are 20 folders representing the 20 different newsgroups. Within these folders are the actual messages posted on the newsgroups, with one file per message. Spend some time to open a few of the files in a text editor to see their contents.
+Start by unzipping the datasets downloaded above and navigating to the `data/twenty_newsgroups` folder. Look at how the data set is structured; there are two folders - one with data for training models, and one for testing how well a model works. Within each of the training and testing folders are 20 folders representing the 20 different newsgroups. Within these folders are the actual messages posted on the newsgroups, with one file per message. Spend some time to open a few of the files in a text editor to see their contents.
 
-Now open a python interpreter (either `python` or `ipython`) to get started learning how to use `scikit-learn`.
+Now open a python interpreter (either `python3` or `ipython3`) to get started learning how to use `scikit-learn`.
 
 We're going to start by loading the dataset into memory. `scikit-learn` contains a number of tools that can help us do this. In order to get faster execution times for the initial parts of this tutorial we will work on a partial dataset with only 4 categories out of the 20 available in the dataset:
 
@@ -74,9 +76,9 @@ Let’s print the first lines of the first loaded file:
 ```python
 >>>
 >>> print("\n".join(twenty_train.data[0].split("\n")[:3]))
-From: sd345@city.ac.uk (Michael Collier)
-Subject: Converting images to HP LaserJet III?
-Nntp-Posting-Host: hampton
+From: clipper@mccarthy.csd.uwo.ca (Khun Yee Fung)
+Subject: Re: looking for circle algorithm faster than Bresenhams
+Organization: Department of Computer Science, The University of Western
 
 >>> print(twenty_train.target_names[twenty_train.target[0]])
 comp.graphics
@@ -89,7 +91,7 @@ For speed and space efficiency reasons `scikit-learn` loads the target attribute
 ```python
 >>>
 >>> twenty_train.target[:10]
-array([1, 1, 3, 3, 3, 3, 3, 2, 2, 2])
+array([1, 0, 2, 2, 0, 1, 1, 3, 3, 2])
 ```
 
 It is possible to get back the category names as follows:
@@ -100,14 +102,14 @@ It is possible to get back the category names as follows:
 ...     print(twenty_train.target_names[t])
 ...
 comp.graphics
+alt.atheism
+sci.med
+sci.med
+alt.atheism
+comp.graphics
 comp.graphics
 soc.religion.christian
 soc.religion.christian
-soc.religion.christian
-soc.religion.christian
-soc.religion.christian
-sci.med
-sci.med
 sci.med
 ```
 
@@ -181,10 +183,10 @@ Rather than transforming the raw counts with the `TfidfTransformer`, it is alter
 >>> tfidf_vect = TfidfVectorizer(stop_words='english',max_df=0.5,min_df=2)
 >>> X_train_tfidf = tfidf_vect.fit_transform(twenty_train.data)
 >>> X_train_tfidf.shape
-(2257, 18189)
+(2257, 18188)
 ```
 
-As you can see from the output, the number of features was reduced from 35788 to 18189 using this approach.
+As you can see from the output, the number of features was reduced from 35788 to 18188 using this approach.
 
 ---------------------------------------
 
@@ -210,26 +212,26 @@ The assignments of the original posts to cluster id is given by `km.labels_` onc
 >>> order_centroids = km.cluster_centers_.argsort()[:, ::-1]
 >>> terms = tfidf_vect.get_feature_names()
 >>> for i in range(4):
-...     print "Cluster %d:" % i,
+...     print("Cluster %d:" % i, end="")
 ...     for ind in order_centroids[i, :10]:
-...         print ' %s' % terms[ind],
-...     print
+...         print(' %s' % terms[ind], end="")
+...     print()
 ...
-Cluster 0:  com graphics university posting host nntp msg article thanks know
-Cluster 1:  keith caltech livesey sgi wpd solntze schneider jon cco morality
-Cluster 2:  god jesus people bible believe christian christians think say don
-Cluster 3:  pitt geb banks gordon cs cadre dsl shameful n3jxp surrender
+Cluster 0: keith caltech livesey sgi wpd solntze jon schneider cco morality
+Cluster 1: pitt geb banks gordon cs cadre dsl shameful n3jxp surrender
+Cluster 2: com university article posting graphics host nntp know msg like
+Cluster 3: god jesus people believe bible christians faith hell christian church
 ```
 
-Notice how when we performed the clustering that we chose to use 4 clusters. This was intentional, as we know that our data comes from 4 different newsgroups. We might hope that the clustering is able to separate out the 4 different newsgroups automatically, although this is in no-way guaranteed as the clustering is purely unsupervised. 
+Notice how when we performed the clustering that we chose to use 4 clusters. This was intentional, as we know that our data comes from 4 different newsgroups. We might hope that the clustering is able to separate out the 4 different newsgroups automatically, although this is in no-way guaranteed as the clustering is purely unsupervised. Your clusters might vary slight from those printed above (in particular with respect to the order of the clusters); this is because KMeans has a random initialisation element to the algorithm. 
 
 A number of different *metrics* exist that allow us to measure how well the clusters fit the known distribution of underlying newsgroups. One such metric is the *homogeneity* which is a measure of how pure the clusters are with respect to the known groupings:
 
 ```python
 >>> from sklearn import metrics
->>> print "Homogeneity: %0.3f" % metrics.homogeneity_score(
-... twenty_train.target, km.labels_)
-Homogeneity: 0.369
+>>> print("Homogeneity: %0.3f" % metrics.homogeneity_score(
+... twenty_train.target, km.labels_))
+Homogeneity: 0.334
 ```
 
 Homogeneity scores vary between 0 and 1; a score of 1 indicates that the clusters match the original label distribution exactly.
@@ -303,20 +305,26 @@ Evaluating the predictive accuracy (average number of correct predictions divide
 0.77230359520639147
 ```
 
-I.e., we achieved 77.2% accuracy. Let's see if we can do better with a linear [support vector machine (SVM)](http://scikit-learn.org/stable/modules/svm.html#svm), which is widely regarded as one of the best text classification algorithms. We can change the learner by just plugging a different classifier object into our pipeline:
+Thie means we achieved a 77.2% accuracy. Let's see if we can do better with a linear [support vector machine (SVM)](http://scikit-learn.org/stable/modules/svm.html#svm), which is widely regarded as one of the best text classification algorithms (when used with suitable features). We can change the learner by just plugging a different classifier object into our pipeline:
 
 ```python
 >>> from sklearn.linear_model import SGDClassifier
 >>> text_clf = Pipeline([('tfidf', TfidfVectorizer()),
 ...                      ('clf', SGDClassifier(loss='hinge', penalty='l2',
-...                                            alpha=1e-3, n_iter=5, 
+...                                            alpha=1e-3, max_iter=5, tol=None,
 ...                                            random_state=42)),
 ... ])
 >>> _ = text_clf.fit(twenty_train.data, twenty_train.target)
 >>> predicted = text_clf.predict(docs_test)
 >>> np.mean(predicted == twenty_test.target)
-0.99667110519307589
+0.90812250332889477
 ```
+
+---------------------------------------
+
+> **Note:** in the above code we're using a `SGDClassifier`. The `SGDClassifier` is a special type of classifier that performs an optimisation process called Stochastic Gradient Descent to minimise the error or loss function. When we use Hinge Loss (`loss='hinge'`) the objective function is equivalent to a Support Vector Machine. The penalty term (`penalty='l2'`) applies an *l2 regulariser* to the optimiser; this has the effect of constraining the magnitudes of the values being optimised. The strength of this regulariser is controlled by the `alpha` parameter. We'll talk more about Support Vector Machines, regularisation and gradient methods later in the week. You should also know that scikit-learn has many other implementations of linear Support Vector Machines (as well as non-linear or Kernel SVMs), which use different mechanisms for optimising the solution (see [http://scikit-learn.org/stable/modules/svm.html#svm](http://scikit-learn.org/stable/modules/svm.html#svm)). The `SGDClassifier` is a good choice for large-scale problems because it uses less memory than the `LinearSVC` (Linear Support Vector Classifier) class.
+
+---------------------------------------
 
 `scikit-learn` further provides utilities for more detailed performance analysis of the results:
 
@@ -326,18 +334,18 @@ I.e., we achieved 77.2% accuracy. Let's see if we can do better with a linear [s
 ...     target_names=twenty_test.target_names))
                         precision    recall  f1-score   support
 
-           alt.atheism       1.00      0.99      0.99       319
-         comp.graphics       1.00      1.00      1.00       389
-               sci.med       1.00      1.00      1.00       396
-soc.religion.christian       0.99      0.99      0.99       398
+           alt.atheism       0.96      0.79      0.87       319
+         comp.graphics       0.87      0.98      0.92       389
+               sci.med       0.94      0.89      0.91       396
+soc.religion.christian       0.89      0.95      0.92       398
 
-           avg / total       1.00      1.00      1.00      1502
+           avg / total       0.91      0.91      0.91      1502
 
 >>> metrics.confusion_matrix(twenty_test.target, predicted)
-array([[316,   0,   0,   3],
-       [  0, 389,   0,   0],
-       [  0,   0, 396,   0],
-       [  1,   1,   0, 396]])
+array([[251,  11,  17,  40],
+       [  1, 382,   3,   3],
+       [  4,  37, 351,   4],
+       [  5,  11,   2, 380]])
 ```
 
 The confusion matrix shows that posts from the newsgroups on atheism and christian are more often confused for one another than with computer graphics.
@@ -352,14 +360,14 @@ Instead of tweaking the parameters of the various components of the chain, it is
 >>> text_clf = Pipeline([('tfidf', TfidfVectorizer()),
 ...                      ('clf', KNeighborsClassifier(n_neighbors=3))
 ... ])
->>> from sklearn.grid_search import GridSearchCV
+>>> from sklearn.model_selection import GridSearchCV
 >>> parameters = {'tfidf__ngram_range': [(1, 1), (1, 2)],
 ...               'tfidf__use_idf': (True, False),
 ...               'clf__n_neighbors': (1, 3, 5, 7)
 ... }
 ```
 
-Obviously, such an exhaustive search can be expensive. If we have multiple CPU cores at our disposal, we can tell the grid searcher to try these eight parameter combinations in parallel with the `n_jobs` parameter. If we give this parameter a value of `-1`, grid search will detect how many cores are installed and uses them all:
+Obviously, such an exhaustive search can be expensive. If we have multiple CPU cores at our disposal, we can tell the grid searcher to try these eight parameter combinations in parallel with the `n_jobs` parameter. If we give this parameter a value of `-1`, grid search will detect how many cores are available and use them all:
 
 ```python
 >>> gs_clf = GridSearchCV(text_clf, parameters, n_jobs=-1)
@@ -374,26 +382,31 @@ The grid search instance behaves like a normal `scikit-learn` model. Let's perfo
 The result of calling `fit` on a `GridSearchCV` object is a classifier that we can use to `predict`:
 
 ```python
->>> twenty_train.target_names[gs_clf.predict(['God is love'])]
+>>> twenty_train.target_names[gs_clf.predict(['God is love'])[0]]
 'soc.religion.christian'
 ```
 
-but otherwise, it's a pretty large and clumsy object. We can, however, get the optimal parameters out by inspecting the object's `grid_scores_` attribute, which is a list of parameters/score pairs. To get the best scoring attributes, we can do:
+The object’s `best_score_` and `best_params_` attributes store the best mean score and the parameters setting corresponding to that score:
 
 ```python
->>> best_parameters, score, _ = max(gs_clf.grid_scores_, key=lambda x: x[1])
+>>>
+>>> gs_clf.best_score_                                  
+0.69999999999999996
+
 >>> for param_name in sorted(parameters.keys()):
-...     print("%s: %r" % (param_name, best_parameters[param_name]))
+...     print("%s: %r" % (param_name, gs_clf.best_params_[param_name]))
 ...
-clf__n_neighbors: 1
-tfidf__ngram_range: (1, 1)
+clf__n_neighbors: 5
+tfidf__ngram_range: (1, 2)
 tfidf__use_idf: True
-
->>> score                                              
-0.78249999999999997
 ```
+A more detailed summary of the search is available in the `gs_clf.cv_results_` attribute.
 
-## Extension exercises
+---------------------------------------
+
+> **Exercise:** Try using `GridSearchCV` together with the `SGDClassifier` SVM classifier we defined above to find the optimal `alpha`, together with the optimal ngram range and use idf parameters for the vectoriser. How does the classification accuracy compare to the K-Nearest-Neighbours classifier? How does the performance change if more training data is used for both classifiers?
+
+---------------------------------------
 
 ---------------------------------------
 
@@ -401,9 +414,46 @@ tfidf__use_idf: True
 
 ---------------------------------------
 
+## Exploring different classification problems
+
+### Language Identification
+
 ---------------------------------------
 
-> **Exercise:** If you have enjoyed this tutorial, the exercises in the `scikit-learn` [Working with Text Data tutorial](http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html#exercises) are a good next step.
+> **Exercise:** Write a text classification pipeline using a custom preprocessor and `CharNGramAnalyzer` using data from Wikipedia articles as training set.
+Evaluate the performance on some held out test set. Download the starter code [here](https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/train_language_model.py) & save it as `train_language_model.py`: 
+
+To run the code use `python3 train_language_model.py path/to/data/language/paragraphs` (change the path to match where your copy of the data is stored)
 
 ---------------------------------------
+
+### Sentiment Analysis
+
+---------------------------------------
+
+> **Exercise:** Write a text classification pipeline to classify movie reviews as either positive or negative. Find a good set of parameters using grid search. Evaluate the performance on a held out test set. Download the starter code [here](https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Monday/ml101-tutorial/sentiment.py) & save it as `sentiment.py`: 
+
+To run the code use `python3 sentiment.py path/to/data/movie_reviews/txt_sentoken` (change the path to match where your copy of the data is stored)
+
+---------------------------------------
+
+### Build a command-line text classification tool
+
+---------------------------------------
+
+> **Exercise:** Using the results of the previous exercises and the cPickle module of the standard library, write a command line utility that detects the language of some text provided on stdin and estimate the polarity (positive or negative) if the text is written in English. 
+> 
+> Bonus points if the utility is able to give a confidence level for its predictions.
+
+---------------------------------------
+
+## Where to go from here
+
+Here are a few suggestions to help further your scikit-learn intuition upon the completion of this tutorial:
+
+* Try playing around with the `analyzer` and `token normalisation` under [`CountVectorizer`](http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer)
+* If you have multiple labels per document, e.g categories, have a look at the [Multiclass and multilabel section](http://scikit-learn.org/stable/modules/multiclass.html#multiclass)
+* Try using [Truncated SVD](http://scikit-learn.org/stable/modules/decomposition.html#lsa) for [latent semantic analysis](https://en.wikipedia.org/wiki/Latent_semantic_analysis).
+* Have a look at using [Out-of-core Classification](http://scikit-learn.org/stable/auto_examples/applications/plot_out_of_core_classification.html#sphx-glr-auto-examples-applications-plot-out-of-core-classification-py) to learn from data that would not fit into the computer main memory.
+* Have a look at the [Hashing Vectorizer](http://scikit-learn.org/stable/modules/feature_extraction.html#hashing-vectorizer) as a memory efficient alternative to `CountVectorizer`.
 
