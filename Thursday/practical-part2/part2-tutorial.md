@@ -4,37 +4,32 @@ _[Jonathon Hare, 21st Jan 2018](https://github.com/jonhare/LloydsRegistryMachine
 
 ## Change History
 
-- 20170308: Initial version
-- 20170403: Update to use Keras 2 API
+- 20170121: Initial version
 
 ## Introduction
 
-Now we've seen how we can use Keras to work towards the solution of a handwriting recognition problem, we'll turn out focus to OS specific data. The USB key you have been provided with contains the data we'll be using. More specifically, the USB key contains 3-band 25cm resolution orthorectified images covering a sample of SU41, coupled with corresponding 16-bit 1-band (greylevel) images that were created by rasterising the MasterMap vector layer on the basis of the labelled `theme` attributes of the polygons representing `TopographicArea` features. The software for generating these rasters is available in the ImageLearn source repository.
-
-We'll use this OS derived data to train some deep models that predict the theme of a pixel, and start to explore commonly used approaches such as transfer learning and fine-tuning of pre-trained networks.
+Now we've seen how we can use Keras to work towards the solution of a handwriting recognition problem, we'll turn our focus to data that is more realistic, using deep-learning models that are much closer to state of the art. The problem with using better models is that we need massive amounts of labelled data to train these models from scratch, and also large amounts of time (typically days of training, even using multiple GPUs). Rather than training from scratch we'll explore using transfer learning and fine-tuning using pre-trained models. The pre-trained models that we'll play with were trained using the ImageNet dataset, which consists of about 1.3 million images in 1000 classes.
 
 Through this part of the tutorial you'll learn how to:
 
-* How to load patches from the OS data into memory
-* How to develop and evaluate a simple CNN for theme classification.
+* How to load image data from the file system
+* How to develop and evaluate a simple CNN for classification.
 * How to use custom callbacks to monitor training progress.
-* How to stitch together classifications for overlapping tiles into a map.
 * How to load a pre-trained model and use it to make classifications.
-* How to modify and fine-tune a pre-trained model to solve the theme classification problem using OS data.
+* How to modify and fine-tune a pre-trained model to solve the a classification problem.
 * How to extract _semantic_ features that can be used for transfer learning and finding similar features.
 
 ## Prerequisites
-As with part 1 of the tutorial, you'll use Python 2 language the `keras`. We'll also again be using the `scikit-learn` and `numpy` packages.
+As with part 1 of the tutorial, you'll use Python 3 language the `keras`. We'll also again be using the `scikit-learn` and `numpy` packages.
 
 You'll need access to a computer with the following installed:
 
-- `Python` (> 2.6)
-- `keras` (>= 1.0.0)
-- `theano` (>= 0.8)
-- `tensorflow` (>= 0.11)
-- `NumPy` (>= 1.6.1)
-- `SciPy` (>= 0.9)
-- `scikit-learn` (>= 0.17.0)
+- `Python` (> 3.6)
+- `keras` (>= 2.0.0)
+- `tensorflow` (>= 1.0.0)
+- `NumPy` (>= 1.12.1)
+- `SciPy` (>= 0.19.1)
+- `scikit-learn` (>= 0.19.1)
 - `opencv`
 - `pillow` (>=4.0.0)
 

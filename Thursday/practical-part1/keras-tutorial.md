@@ -38,7 +38,7 @@ You'll need access to a computer with the following installed:
 - `tensorflow` (>= 1.0.0)
 - `NumPy` (>= 1.12.1)
 - `SciPy` (>= 0.19.1)
-- `scikit-learn` (>= 0.17.0)
+- `scikit-learn` (>= 0.19.1)
 
 If you've installed the base Anaconda python distribution, then running `conda install keras` will install both keras and tensorflow. 
 
