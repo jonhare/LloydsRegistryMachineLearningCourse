@@ -17,4 +17,4 @@ for i in xrange(0,30):
 
 # show the plot
 plt.show()
-pl.savefig("filters.png")
+plt.savefig("filters.png")
