@@ -70,6 +70,8 @@ To demonstrate how easy it is to load the MNIST dataset, we will first write a l
 ```python
 # Plot ad hoc mnist instances
 from keras.datasets import mnist
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 # load (downloaded if needed) the MNIST dataset
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -84,6 +86,7 @@ plt.subplot(224)
 plt.imshow(X_train[3], cmap=plt.get_cmap('gray'))
 # show the plot
 plt.show()
+plt.savefig("filters.png")
 ```
 
 You can see that downloading and loading the MNIST dataset is as easy as calling the `mnist.load_data()` function. Running the above example, you should see the image below.
@@ -650,7 +653,7 @@ for i in xrange(0,15):
 
 	# plot the results
 	plt.subplot(4,4,i+1)
-	plt.imshow(input_img_data[0][0], cmap=plt.get_cmap('gray'))
+	plt.imshow(input_img_data[0,:,:0], cmap=plt.get_cmap('gray'))
 
 # show the plot
 plt.show()

@@ -1,5 +1,7 @@
 # Plot ad hoc mnist instances
 from keras.datasets import mnist
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 # load (downloaded if needed) the MNIST dataset
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -14,3 +16,4 @@ plt.subplot(224)
 plt.imshow(X_train[3], cmap=plt.get_cmap('gray'))
 # show the plot
 plt.show()
+plt.savefig("mnist.png")
