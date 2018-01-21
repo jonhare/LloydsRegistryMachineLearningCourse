@@ -63,6 +63,9 @@ test_steps_per_epoch = numpy.math.ceil(float(test_generator.samples) / test_gene
 raw_predictions = model.predict_generator(test_generator, steps=test_steps_per_epoch)
 predictions = numpy.argmax(raw_predictions, axis=1)
 
+print(numpy.bincount(test_generator.classes))
+print(numpy.bincount(predictions))
+
 from sklearn import metrics
 class_labels = list(test_generator.class_indices.keys())
 print(metrics.classification_report(test_generator.classes, predictions, target_names=class_labels))
