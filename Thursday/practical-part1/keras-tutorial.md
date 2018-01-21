@@ -183,46 +183,43 @@ scores = model.evaluate(X_test, y_test, verbose=0)
 print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 ```
 
-Running the example might take a few minutes when run on a CPU (probably around 4s per epoch, but might be slower if you're sharing the machine with others). However, by default when using the Tensorflow backend the GPU will be used if it's available, and each epoch will be a lot faster:
+Running the example might take a few minutes when run on a CPU (probably around 9s per epoch, but might be slower if you're sharing the machine with others). However, by default when using the Tensorflow backend the GPU will be used if it's available, and each epoch will be a lot faster:
 
 	Using TensorFlow backend.
-	I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcublas.so locally
-	I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcudnn.so locally
-	I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcufft.so locally
-	I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcuda.so.1 locally
-	I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcurand.so locally
-	I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:925] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-	I tensorflow/core/common_runtime/gpu/gpu_device.cc:951] Found device 0 with properties: 
-	name: GeForce GTX TITAN X
-	major: 5 minor: 2 memoryClockRate (GHz) 1.076
-	pciBusID 0000:01:00.0
-	Total memory: 11.92GiB
-	Free memory: 11.81GiB
-	I tensorflow/core/common_runtime/gpu/gpu_device.cc:972] DMA: 0 
-	I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] 0:   Y 
-	I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:01:00.0)
 	Train on 60000 samples, validate on 10000 samples
 	Epoch 1/10
-	1s - loss: 0.2790 - acc: 0.9203 - val_loss: 0.1423 - val_acc: 0.9579
+	2018-01-21 14:47:42.029792: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-21 14:47:42.029818: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-21 14:47:42.618171: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+	2018-01-21 14:47:42.618900: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+	name: GeForce GTX TITAN X
+	major: 5 minor: 2 memoryClockRate (GHz) 1.076
+	pciBusID 0000:02:00.0
+	Total memory: 11.92GiB
+	Free memory: 11.80GiB
+	2018-01-21 14:47:42.618923: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+	2018-01-21 14:47:42.618934: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+	2018-01-21 14:47:42.618949: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
+	5s - loss: 0.2775 - acc: 0.9213 - val_loss: 0.1390 - val_acc: 0.9581
 	Epoch 2/10
-	1s - loss: 0.1121 - acc: 0.9679 - val_loss: 0.0992 - val_acc: 0.9696
+	1s - loss: 0.1097 - acc: 0.9685 - val_loss: 0.0911 - val_acc: 0.9729
 	Epoch 3/10
-	1s - loss: 0.0722 - acc: 0.9790 - val_loss: 0.0781 - val_acc: 0.9745
+	1s - loss: 0.0703 - acc: 0.9804 - val_loss: 0.0822 - val_acc: 0.9753
 	Epoch 4/10
-	1s - loss: 0.0508 - acc: 0.9853 - val_loss: 0.0782 - val_acc: 0.9761
+	1s - loss: 0.0495 - acc: 0.9859 - val_loss: 0.0750 - val_acc: 0.9778
 	Epoch 5/10
-	1s - loss: 0.0365 - acc: 0.9898 - val_loss: 0.0640 - val_acc: 0.9790
+	1s - loss: 0.0364 - acc: 0.9896 - val_loss: 0.0658 - val_acc: 0.9800
 	Epoch 6/10
-	1s - loss: 0.0264 - acc: 0.9930 - val_loss: 0.0643 - val_acc: 0.9797
+	1s - loss: 0.0265 - acc: 0.9932 - val_loss: 0.0643 - val_acc: 0.9803
 	Epoch 7/10
-	1s - loss: 0.0185 - acc: 0.9956 - val_loss: 0.0621 - val_acc: 0.9799
+	1s - loss: 0.0200 - acc: 0.9950 - val_loss: 0.0622 - val_acc: 0.9809
 	Epoch 8/10
-	1s - loss: 0.0145 - acc: 0.9970 - val_loss: 0.0617 - val_acc: 0.9810
+	1s - loss: 0.0139 - acc: 0.9970 - val_loss: 0.0626 - val_acc: 0.9810
 	Epoch 9/10
-	1s - loss: 0.0104 - acc: 0.9981 - val_loss: 0.0602 - val_acc: 0.9817
+	1s - loss: 0.0108 - acc: 0.9977 - val_loss: 0.0579 - val_acc: 0.9816
 	Epoch 10/10
-	1s - loss: 0.0072 - acc: 0.9987 - val_loss: 0.0590 - val_acc: 0.9826
-	Baseline Error: 1.74%
+	1s - loss: 0.0081 - acc: 0.9984 - val_loss: 0.0566 - val_acc: 0.9821
+	Baseline Error: 1.79%
 
 If you want to try forcing the code to run on the CPU to see how slow it will be you can set the `CUDA_VISIBLE_DEVICES` environment variable to an empty string using `export CUDA_VISIBLE_DEVICES=`, or set it temporarily whilst you run the code: `CUDA_VISIBLE_DEVICES= python keras-mnist-mlp.py`.
 
@@ -324,32 +321,44 @@ print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 
 Running the example, the accuracy on the training and validation test is printed each epoch and at the end of the classification error rate is printed.
 
-Epochs may take a second or so on the Titan X, although will take a fair bit longer on the CPU (perhaps ~46s per epoch). You can see that the network achieves an error rate of 1.08, which is better than the simple multi-layer perceptron model above.
+Epochs may take a second or so on the Titan X, although will take a fair bit longer on the CPU (perhaps ~46s per epoch). You can see that the network achieves an error rate of 1.06, which is better than the simple multi-layer perceptron model above.
 
-	Using Theano backend.
-	Using gpu device 0: GeForce GTX TITAN X (CNMeM is disabled, cuDNN 5105)
+	Using TensorFlow backend.
 	Train on 60000 samples, validate on 10000 samples
 	Epoch 1/10
-	1s - loss: 0.2422 - acc: 0.9315 - val_loss: 0.0750 - val_acc: 0.9773
+	2018-01-21 14:49:59.159123: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-21 14:49:59.159149: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-21 14:49:59.412522: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+	2018-01-21 14:49:59.413240: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+	name: GeForce GTX TITAN X
+	major: 5 minor: 2 memoryClockRate (GHz) 1.076
+	pciBusID 0000:02:00.0
+	Total memory: 11.92GiB
+	Free memory: 11.80GiB
+	2018-01-21 14:49:59.413263: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+	2018-01-21 14:49:59.413272: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+	2018-01-21 14:49:59.413281: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
+	4s - loss: 0.2258 - acc: 0.9347 - val_loss: 0.0788 - val_acc: 0.9755
 	Epoch 2/10
-	1s - loss: 0.0729 - acc: 0.9780 - val_loss: 0.0521 - val_acc: 0.9830
+	2s - loss: 0.0703 - acc: 0.9793 - val_loss: 0.0478 - val_acc: 0.9847
 	Epoch 3/10
-	1s - loss: 0.0497 - acc: 0.9852 - val_loss: 0.0394 - val_acc: 0.9855
+	2s - loss: 0.0506 - acc: 0.9843 - val_loss: 0.0426 - val_acc: 0.9865
 	Epoch 4/10
-	1s - loss: 0.0413 - acc: 0.9869 - val_loss: 0.0432 - val_acc: 0.9857
+	2s - loss: 0.0397 - acc: 0.9875 - val_loss: 0.0399 - val_acc: 0.9867
 	Epoch 5/10
-	1s - loss: 0.0324 - acc: 0.9899 - val_loss: 0.0393 - val_acc: 0.9864
+	2s - loss: 0.0323 - acc: 0.9899 - val_loss: 0.0346 - val_acc: 0.9876
 	Epoch 6/10
-	1s - loss: 0.0285 - acc: 0.9911 - val_loss: 0.0430 - val_acc: 0.9863
+	2s - loss: 0.0263 - acc: 0.9916 - val_loss: 0.0322 - val_acc: 0.9897
 	Epoch 7/10
-	1s - loss: 0.0225 - acc: 0.9928 - val_loss: 0.0323 - val_acc: 0.9893
+	2s - loss: 0.0211 - acc: 0.9936 - val_loss: 0.0357 - val_acc: 0.9884
 	Epoch 8/10
-	1s - loss: 0.0200 - acc: 0.9938 - val_loss: 0.0361 - val_acc: 0.9889
+	2s - loss: 0.0189 - acc: 0.9940 - val_loss: 0.0309 - val_acc: 0.9886
 	Epoch 9/10
-	1s - loss: 0.0155 - acc: 0.9952 - val_loss: 0.0328 - val_acc: 0.9893
+	2s - loss: 0.0168 - acc: 0.9946 - val_loss: 0.0302 - val_acc: 0.9896
 	Epoch 10/10
-	1s - loss: 0.0144 - acc: 0.9953 - val_loss: 0.0321 - val_acc: 0.9892
-	Baseline Error: 1.08%
+	2s - loss: 0.0138 - acc: 0.9952 - val_loss: 0.0305 - val_acc: 0.9894
+	Baseline Error: 1.06%
+
 
 ## Larger Convolutional Neural Network for MNIST
 
@@ -432,32 +441,43 @@ print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 
 Running the example prints accuracy on the training and validation datasets each epoch and a final classification error rate.
 
-The model takes about a couple of seconds to run per epoch on a Titan X GPU (CPU run times are around 60s/epoch). This slightly larger model achieves the respectable classification error rate of 0.89%.
+The model takes about a couple of seconds to run per epoch on a Titan X GPU (CPU run times are around 60s/epoch). This slightly larger model achieves the respectable classification error rate of 0.84%.
 
-	Using Theano backend.
-	Using gpu device 0: GeForce GTX TITAN X (CNMeM is disabled, cuDNN 5105)
+	Using TensorFlow backend.
 	Train on 60000 samples, validate on 10000 samples
 	Epoch 1/10
-	2s - loss: 0.3777 - acc: 0.8796 - val_loss: 0.0800 - val_acc: 0.9749
+	2018-01-21 14:51:56.002201: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-21 14:51:56.002228: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-21 14:51:56.256299: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+	2018-01-21 14:51:56.257014: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+	name: GeForce GTX TITAN X
+	major: 5 minor: 2 memoryClockRate (GHz) 1.076
+	pciBusID 0000:02:00.0
+	Total memory: 11.92GiB
+	Free memory: 11.80GiB
+	2018-01-21 14:51:56.257063: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+	2018-01-21 14:51:56.257072: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+	2018-01-21 14:51:56.257082: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
+	3s - loss: 0.3846 - acc: 0.8830 - val_loss: 0.0805 - val_acc: 0.9754
 	Epoch 2/10
-	1s - loss: 0.0917 - acc: 0.9713 - val_loss: 0.0464 - val_acc: 0.9856
+	2s - loss: 0.1002 - acc: 0.9688 - val_loss: 0.0605 - val_acc: 0.9791
 	Epoch 3/10
-	1s - loss: 0.0666 - acc: 0.9790 - val_loss: 0.0373 - val_acc: 0.9878
+	2s - loss: 0.0721 - acc: 0.9780 - val_loss: 0.0393 - val_acc: 0.9877
 	Epoch 4/10
-	1s - loss: 0.0529 - acc: 0.9830 - val_loss: 0.0329 - val_acc: 0.9888
+	2s - loss: 0.0580 - acc: 0.9819 - val_loss: 0.0357 - val_acc: 0.9884
 	Epoch 5/10
-	1s - loss: 0.0457 - acc: 0.9856 - val_loss: 0.0307 - val_acc: 0.9895
+	2s - loss: 0.0487 - acc: 0.9844 - val_loss: 0.0343 - val_acc: 0.9898
 	Epoch 6/10
-	2s - loss: 0.0396 - acc: 0.9878 - val_loss: 0.0299 - val_acc: 0.9900
+	2s - loss: 0.0436 - acc: 0.9862 - val_loss: 0.0281 - val_acc: 0.9916
 	Epoch 7/10
-	2s - loss: 0.0364 - acc: 0.9881 - val_loss: 0.0239 - val_acc: 0.9919
+	2s - loss: 0.0378 - acc: 0.9882 - val_loss: 0.0328 - val_acc: 0.9886
 	Epoch 8/10
-	1s - loss: 0.0330 - acc: 0.9892 - val_loss: 0.0288 - val_acc: 0.9907
+	2s - loss: 0.0368 - acc: 0.9880 - val_loss: 0.0272 - val_acc: 0.9915
 	Epoch 9/10
-	1s - loss: 0.0300 - acc: 0.9902 - val_loss: 0.0215 - val_acc: 0.9930
+	2s - loss: 0.0306 - acc: 0.9902 - val_loss: 0.0236 - val_acc: 0.9931
 	Epoch 10/10
-	1s - loss: 0.0267 - acc: 0.9913 - val_loss: 0.0250 - val_acc: 0.9911
-	Baseline Error: 0.89%
+	2s - loss: 0.0303 - acc: 0.9902 - val_loss: 0.0262 - val_acc: 0.9916
+	Baseline Error: 0.84%
 
 ## Saving models
 
@@ -494,7 +514,7 @@ print("predicted digit: "+str(model.predict_classes(image)[0]))
 We can run this with a sample image:
 
 ```
-wget https://github.com/jonhare/vlc-deep-learning-labs/raw/master/1.PNG
+wget https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Thursday/practical-part1/1.PNG
 python keras-mnist-forward.py 1.PNG
 Using Theano backend.
 Using gpu device 0: GeForce GT 650M (CNMeM is disabled, cuDNN 5105)
@@ -548,7 +568,7 @@ image = imread("1.PNG").astype(float)
 image = image / 255.0
 
 # reshape
-image = image.reshape(1,1,28,28)
+image = image.reshape(1,28,28,1)
 
 # define a keras function to extract the 3rd layer response maps
 get_3rd_layer_output = K.function([model.layers[0].input],
@@ -600,7 +620,7 @@ for i in xrange(0,15):
 	iterate = K.function([input_img], [loss, grads])
 
 	# we start from a gray image with some noise
-	input_img_data = np.random.random((1, 1, 28, 28)) * 0.07 + 0.5
+	input_img_data = np.random.random((1, 28, 28, 1)) * 0.07 + 0.5
 	
 	# run gradient ascent for 50 steps
 	for j in range(50):
@@ -629,9 +649,9 @@ from keras.models import Model
 def branch_model():
 	model = Sequential()
 
-	x = Input(shape=(1, 28, 28))
+	x = Input(shape=(28, 28, 1))
 	left = Convolution2D(16, (1, 1), padding='same')(x)
-	right = Convolution2D(16, (5, 5), padding='same', input_shape=(1, 28, 28), activation='relu')(x)
+	right = Convolution2D(16, (5, 5), padding='same', activation='relu')(x)
 	y = add([left, right])
 	block = Model(inputs=x, outputs=y)
 

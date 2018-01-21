@@ -30,7 +30,7 @@ num_classes = y_test.shape[1]
 def larger_model():
 	# create model
 	model = Sequential()
-	model.add(Convolution2D(30, (5, 5), padding='valid', input_shape=(1, 28, 28), activation='relu'))
+	model.add(Convolution2D(30, (5, 5), padding='valid', input_shape=(28, 28, 1), activation='relu'))
 	model.add(MaxPooling2D(pool_size=(2, 2)))
 	model.add(Convolution2D(15, (3, 3), activation='relu'))
 	model.add(MaxPooling2D(pool_size=(2, 2)))
