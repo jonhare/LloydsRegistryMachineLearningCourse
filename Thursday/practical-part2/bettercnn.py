@@ -18,13 +18,13 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 train_generator = train_datagen.flow_from_directory(
         'data/train',
         target_size=(100, 30),
-        batch_size=32,
+        batch_size=64,
         class_mode='categorical')
 
 test_generator = test_datagen.flow_from_directory(
         'data/test',
         target_size=(100, 30),
-        batch_size=32,
+        batch_size=64,
         class_mode='categorical')
 
 num_classes = len(train_generator.class_indices)
