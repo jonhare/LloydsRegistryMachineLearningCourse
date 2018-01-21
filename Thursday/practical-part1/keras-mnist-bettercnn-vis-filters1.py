@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 from keras.models import load_model
 from scipy.misc import imread
 
+matplotlib.use("Agg")
+
 # load a model
 model = load_model('bettercnn.h5')
 
@@ -14,3 +16,4 @@ for i in xrange(0,30):
 
 # show the plot
 plt.show()
+pl.savefig("filters.png")

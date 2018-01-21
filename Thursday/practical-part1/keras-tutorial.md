@@ -516,8 +516,19 @@ We can run this with a sample image:
 ```
 wget https://github.com/jonhare/LloydsRegistryMachineLearningCourse/raw/master/Thursday/practical-part1/1.PNG
 python keras-mnist-forward.py 1.PNG
-Using Theano backend.
-Using gpu device 0: GeForce GT 650M (CNMeM is disabled, cuDNN 5105)
+Using TensorFlow backend.
+2018-01-21 14:55:16.453161: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-01-21 14:55:16.453191: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-01-21 14:55:16.701871: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2018-01-21 14:55:16.702581: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+name: GeForce GTX TITAN X
+major: 5 minor: 2 memoryClockRate (GHz) 1.076
+pciBusID 0000:02:00.0
+Total memory: 11.92GiB
+Free memory: 11.80GiB
+2018-01-21 14:55:16.702605: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+2018-01-21 14:55:16.702613: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+2018-01-21 14:55:16.702623: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
 1/1 [==============================] - 0s
 predicted digit: 1
 ```
