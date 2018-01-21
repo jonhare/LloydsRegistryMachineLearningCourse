@@ -15,7 +15,7 @@ numpy.random.seed(seed)
 train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-batch_size=64
+batch_size=32
 
 train_generator = train_datagen.flow_from_directory(
         'data/train',
@@ -27,7 +27,8 @@ test_generator = test_datagen.flow_from_directory(
         'data/test',
         target_size=(100, 30),
         batch_size=batch_size,
-        class_mode='categorical')
+        class_mode='categorical',
+        shuffle=False)
 
 num_classes = len(train_generator.class_indices)
 
@@ -58,9 +59,10 @@ model.fit_generator(
         verbose=1)
 
 # Final evaluation of the model
-scores = model.evaluate_generator(test_generator, steps=1324 // batch_size)
+test_steps_per_epoch = numpy.math.ceil(float(test_generator.samples) / test_generator.batch_size)
+raw_predictions = model.predict_generator(test_generator, steps=test_steps_per_epoch)
+predictions = numpy.argmax(raw_predictions, axis=1)
 
 from sklearn import metrics
-print(metrics.classification_report(test_generator.classes, scores, target_names=test_generator.class_indices))
-
-metrics.confusion_matrix(twenty_test.target, predicted)
+class_labels = list(test_generator.class_indices.keys())
+print(metrics.classification_report(test_generator.classes, predictions, target_names=class_labels))
