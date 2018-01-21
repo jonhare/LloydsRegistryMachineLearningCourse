@@ -25,7 +25,7 @@ layer_output = get_3rd_layer_output([image])[0]
 # plot the results
 for i in xrange(0,15):
 	plt.subplot(4,4,i+1)
-	plt.imshow(layer_output[0][i], cmap=plt.get_cmap('gray'))
+	plt.imshow(layer_output[0,:,:,i], cmap=plt.get_cmap('gray'))
 
 # show the plot
 plt.show()

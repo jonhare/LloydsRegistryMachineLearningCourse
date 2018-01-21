@@ -30,7 +30,7 @@ for i in xrange(0,15):
 	iterate = K.function([input_img], [loss, grads])
 
 	# we start from a gray image with some noise
-	input_img_data = np.random.random((1, 1, 28, 28)) * 0.07 + 0.5
+	input_img_data = np.random.random((1, 28, 28, 1)) * 0.07 + 0.5
 	
 	# run gradient ascent for 50 steps
 	for j in range(50):
@@ -43,3 +43,4 @@ for i in xrange(0,15):
 
 # show the plot
 plt.show()
+plt.savefig("maxact.png")
