@@ -15,16 +15,18 @@ numpy.random.seed(seed)
 train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
+batch_size=64
+
 train_generator = train_datagen.flow_from_directory(
         'data/train',
         target_size=(100, 30),
-        batch_size=64,
+        batch_size=batch_size,
         class_mode='categorical')
 
 test_generator = test_datagen.flow_from_directory(
         'data/test',
         target_size=(100, 30),
-        batch_size=64,
+        batch_size=batch_size,
         class_mode='categorical')
 
 num_classes = len(train_generator.class_indices)
@@ -51,12 +53,12 @@ model = larger_model()
 # Fit the model
 model.fit_generator(
         train_generator,
-        steps_per_epoch=3869,
-        epochs=50,
+        steps_per_epoch=3869 // batch_size, 
+        epochs=10,
         verbose=1)
 
 # Final evaluation of the model
-scores = model.evaluate_generator(test_generator, steps=1324)
+scores = model.evaluate_generator(test_generator, steps=1324 // batch_size)
 
 from sklearn import metrics
 print(metrics.classification_report(test_generator.classes, scores, target_names=test_generator.class_indices))
