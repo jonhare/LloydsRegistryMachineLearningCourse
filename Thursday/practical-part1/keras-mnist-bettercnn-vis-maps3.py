@@ -1,7 +1,9 @@
-import matplotlib.pyplot as plt
 from keras.models import load_model
 from keras import backend as K
 from scipy.misc import imread
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 # load a model
 model = load_model('bettercnn.h5')
@@ -27,3 +29,4 @@ for i in xrange(0,15):
 
 # show the plot
 plt.show()
+plt.savefig("maps.png")

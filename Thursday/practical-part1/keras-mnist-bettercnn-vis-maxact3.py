@@ -1,8 +1,9 @@
-import matplotlib.pyplot as plt
 from keras.models import load_model
 from keras import backend as K
 import numpy as np
-
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 # load a model
 model = load_model('bettercnn.h5')
