@@ -39,7 +39,7 @@ for i in xrange(0,15):
 
 	# plot the results
 	plt.subplot(4,4,i+1)
-	plt.imshow(input_img_data[0][0], cmap=plt.get_cmap('gray'))
+	plt.imshow(input_img_data[0,:,:,0], cmap=plt.get_cmap('gray'))
 
 # show the plot
 plt.show()
