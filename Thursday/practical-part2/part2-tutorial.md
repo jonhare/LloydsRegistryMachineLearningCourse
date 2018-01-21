@@ -8,7 +8,7 @@ _[Jonathon Hare, 21st Jan 2018](https://github.com/jonhare/LloydsRegistryMachine
 
 ## Introduction
 
-Now we've seen how we can use Keras to work towards the solution of a handwriting recognition problem, we'll turn our focus to data that is more realistic, using deep-learning models that are much closer to state of the art. The problem with using better models is that we need massive amounts of labelled data to train these models from scratch, and also large amounts of time (typically days of training, even using multiple GPUs). Rather than training from scratch we'll explore using transfer learning and fine-tuning using pre-trained models. The pre-trained models that we'll play with were trained using the ImageNet dataset, which consists of about 1.3 million images in 1000 classes.
+Now we've seen how we can use Keras to work towards the solution of a handwriting recognition problem, we'll turn our focus to data that is more realistic (and focussed on a maritime application), using deep-learning models that are much closer to state of the art. The problem with using better models is that we need massive amounts of labelled data to train these models from scratch, and also large amounts of time (typically days of training, even using multiple GPUs). Rather than training from scratch we'll explore using transfer learning and fine-tuning using pre-trained models. The pre-trained models that we'll play with were trained using the ImageNet dataset, which consists of about 1.3 million images in 1000 classes.
 
 Through this part of the tutorial you'll learn how to:
 
@@ -34,49 +34,55 @@ You'll need access to a computer with the following installed:
 - `pillow` (>=4.0.0)
 
 ## Getting started 
-If you haven't already, you need to fork and clone the tutorial code from https://github.com/jonhare/os-deep-learning-labs in order to access the provided utility functions that facilitate the use of the OS data. Once you have a local copy of the repository, copy the data directory from the memory stick into the part2 folder of the clone.
+Start by downloading and unzipping the data set:
 
-We'll start by exploring the data, and look at how we can get that data loaded into memory through python code. If you open the data directory you should see three folders:
-	- The `3band` folder contains the 25cm orthorectified RGB imagery for SU41. 
-	- The `theme` folder contains the rasterised "theme maps" corresponding to each RGB SU41 tile.
-	- The `key-theme.txt` file contains the mapping from human-readable theme names to the 16-bit greylevel values used in the theme maps to represent regions with a particular theme label.
+```
+wget
+unzip data.zip
+```
 
-Let's now write a script to use the functions in the provided `utils.py` file to load some of the data. Unlike the mnist data we explored earlier, we cannot practically load all of the data into memory in one go. We also need to do some processing because, at least initially, we want to extract patches of the larger RGB images together with a label that describes the theme of the central pixel. Three key functions are provided by the `utils.py` file:
-	- `load_labelled_patches()`: this loads a subset of the data into memory as a tuple containing two numpy arrays; the first contains the patches, and the second contains the (one-hot encoded) theme labels.
-	- `generate_labelled_patches()`: this is a python generator that dynamically returns an a batch of patches and labels. The generator called over and over and will return a new batch of data each time by sampling the underlying 3-band images and theme maps. The generator makes it possible to effectively pass over the entire dataset a little bit at a time.
-	- `load_class_names()`: This loads a list of class names that correspond with the encoded labels produced by the above functions. As the labels are one-hot encoded, in order to lookup a class from this list from the one-hot vector, you'll need to use the `argmax()` function on the one-hot vector to find the position of the largest value, which maps directly to the list of class names (see below for an example).
+We'll start by exploring the data, and look at how we can get that data loaded into memory through python code. If you open the data directory you should see two folders:
+	- The `train` folder contains the training data & is broken into subdirectories for each class. 
+	- The `test` folder contains the testing data & is broken into subdirectories for each class. 
 
-To demonstrate the `load_labelled_patches()` function, the following code demonstrates the loading of data by plotting 4 random images and their theme labels:
+The keras library has support for directly reading images from a directory structure like the one we have using the `ImageDataGenerator` class. In addition to loading the images directly, keras provides a mechanism to dynamically augment the data being read by applying random transformations (flipping, rotating, etc), as well as cropping and scaling the images. The following code will generate a visualisation of the first batch of images produced by the generator:
 
 ```python
-# Plot ad hoc OS data instances
-from utils import load_labelled_patches, load_class_names
+# Plot ad hoc data instances
+from keras.preprocessing.image import ImageDataGenerator
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from keras import backend as K
+import numpy
 
-# load 4 randomly selected 128x128 patches and their labels
-(X, y) = load_labelled_patches(["SU4010"], 128, limit=4, shuffle=True)
+datagen = ImageDataGenerator(rescale=1./255)
+generator = datagen.flow_from_directory(
+        'data/train',
+        target_size=(240, 800),
+        batch_size=4,
+        class_mode='categorical')
 
-# load the list of possible labels
-clznames = load_class_names()
+# generate the first batch
+(batch_images, batch_labels) = generator.next()
 
-#if we're using the theano backend, we need to change indexing order for matplotlib to interpret the patches:
-if K.image_dim_ordering() == 'th':
-	X = X.transpose(0, 3, 1, 2)
+class_labels = [item[0] for item in sorted(generator.class_indices.items(), key=lambda x: x[1])] #get a list of classes
+batch_labels = numpy.argmax(batch_labels, axis=1) #convert the one-hot labels to indices
 
 # plot 4 images
-plt.subplot(221).set_title(clznames[y[0].argmax()])
-plt.imshow(X[0])
-plt.subplot(222).set_title(clznames[y[1].argmax()])
-plt.imshow(X[1])
-plt.subplot(223).set_title(clznames[y[2].argmax()])
-plt.imshow(X[2])
-plt.subplot(224).set_title(clznames[y[3].argmax()])
-plt.imshow(X[3])
+plt.subplot(221).set_title(class_labels[batch_labels[0]])
+plt.imshow(batch_images[0], aspect='equal')
+plt.subplot(222).set_title(class_labels[batch_labels[1]])
+plt.imshow(batch_images[1], aspect='equal')
+plt.subplot(223).set_title(class_labels[batch_labels[2]])
+plt.imshow(batch_images[2], aspect='equal')
+plt.subplot(224).set_title(class_labels[batch_labels[3]])
+plt.imshow(batch_images[3], aspect='equal')
 
 # show the plot
 plt.show()
+plt.savefig("batch.png")
 ```
+
 You can see that accessing the dataset is quite easy: the first argument to the `load_labelled_patches` function specifies a list of tiles to load from; the second specifies how big the patches are, the optional `limit` argument ensures we only load 4 patches, and the optional `shuffle` argument tells the function to pick the patches randomly rather than in scan order. Running the above example, you should see something like the image below (obviously you'll get different patches because of the shuffling).
 
 ![Examples from the SU41 dataset](https://github.com/jonhare/os-deep-learning-labs/raw/master/part2/images/vis.png "Examples from the SU41 dataset")
