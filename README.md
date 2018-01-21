@@ -6,17 +6,22 @@ Notes, demos and materials for learning Machine Learning
   + *Leaders: Prof Niranjan, Prof Prugel-Bennett and Dr Hare*
   + Topics Covered:
     * Success stories in machine learning
-    * Failures of machine learning
+    * [Failures of machine learning](https://github.com/jonhare/LloydsRegistryMachineLearningCourse/blob/master/Monday/ML-failures.md)
     * Machine learning techniques
       * Linear Regression, MLP, SVMs, Decision Trees, Deep Learning
     * Machine learning problems
       * Supervised learning (regression/classification), Unsupervised learning (PCA/clustering), Semi-supervised learning, reinforcement learning
     * Making sense of data
       * Types of data (images, text, numbers)
+        - Encoding data and feature extraction
       * Data preparation, missing data
+        - Balancing data
     *  Common tools
       * Matlab, python
-      * Homework
+    * Practical walkthrough - understanding variance
+    * [Machine Learning 101 - classifying text](https://github.com/jonhare/LloydsRegistryMachineLearningCourse/blob/master/Monday/ml101-tutorial/tutorial.md)
+    * Discussion about what problems we would like to explore on Friday
+    * Homework - reflect on how the day's activities could be applied
 - **Tuesday:** Introduction to Machine Learning
   + *Leaders: Prof Niranjan*
   + Topics Covered:
@@ -45,10 +50,29 @@ Notes, demos and materials for learning Machine Learning
   + *Leader: Dr Jonathon Hare*
   + Topics Covered:
     * Why Deep
-    * CNNs
-    * RNNs (LSTM, etc.)
+      * CNNs
+      * RNNs (LSTM, etc.)
+    * Word Embeddings
+    * Loss functions
     * GPU programming (libraries)
-    * Keras tutorial
+    * Keras tutorial 1 - building simple CNNs
+    * Transfer Learning
+    * Keras tutorial 2 - transfer learning with CNNs
+    * Keras tutorial 3 - Text classification
+    * Keras tutorial 4 - Sequence modelling
+    * Current research challenges
+      - Visual
+        + segmentation
+        + object detection
+        + multi-label classification
+      - Text
+        + sequence-sequence learning
+          * translation, embedding, etc
+          * logical inference & QA
+      - Cross-modal transfer
+        + generating from embeddings
+        + VQA
+      - GANs
     * Homework
 - **Friday:** Practical Machine Learning
   + *Leaders: Prof Niranjan, Prof Prugel-Bennett and Dr Hare*
