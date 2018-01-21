@@ -19,13 +19,13 @@ batch_size=32
 
 train_generator = train_datagen.flow_from_directory(
         'data/train',
-        target_size=(100, 30),
+        target_size=(30, 100),
         batch_size=batch_size,
         class_mode='categorical')
 
 test_generator = test_datagen.flow_from_directory(
         'data/test',
-        target_size=(100, 30),
+        target_size=(30, 100),
         batch_size=batch_size,
         class_mode='categorical',
         shuffle=False)
