@@ -7,21 +7,14 @@ from keras.models import Model
 from keras.layers import Dense, Input
 from keras import optimizers
 
-# the resnet expects 224x224 inputs
-patch_size = 224
-
-def preprocess_input2(img):
-	print(img.shape)
-	return preprocessing_function(img)
-
 # load data
-train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input2)
-test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input2)
+train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
 # the number of images that will be processed in a single step
 batch_size=32
-# the size of the images that we'll learn on - we'll shrink them from the original size for speed
-image_size=(patch_size, patch_size)
+# the size of the images that we'll learn on - we'll use their natural size
+image_size=(240, 800)
 
 train_generator = train_datagen.flow_from_directory(
         'data/train',
@@ -45,21 +38,18 @@ test_generator = test_datagen.flow_from_directory(
 
 num_classes = len(train_generator.class_indices)
 
-def hack_resnet(num_classes):
-	model = ResNet50(include_top=True, weights='imagenet')
-
-	# Get input
-	new_input = model.input
-	# Find the layer to connect
-	hidden_layer = model.layers[-2].output
-	# Connect a new layer on it
-	new_output = Dense(num_classes) (hidden_layer)
-	# Build a new model
-	newmodel = Model(new_input, new_output)
+def hack_resnet(input_size, num_classes):
+	base_model = ResNet50(include_top=False, weights='imagenet', input_shape=input_size)
+	x = base_model.output
+	x = Flatten()(x)
+    x = Dense(classes, activation='softmax', name='fc1000')(x)
+   	
+   	# this is the model we will train
+	newmodel = Model(inputs=base_model.input, outputs=predictions)
 
 	return newmodel
 
-model = hack_resnet(num_classes)
+model = hack_resnet(train_generator.image_shape, num_classes)
 
 # set weights in all but last layer
 # to non-trainable (weights will not be updated)
