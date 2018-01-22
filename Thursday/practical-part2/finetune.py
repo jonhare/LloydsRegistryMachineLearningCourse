@@ -10,9 +10,13 @@ from keras import optimizers
 # the resnet expects 224x224 inputs
 patch_size = 224
 
+def preprocess_input2(img):
+	print(img.shape)
+	return preprocessing_function(img)
+
 # load data
-train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
-test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input2)
+test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input2)
 
 # the number of images that will be processed in a single step
 batch_size=32
