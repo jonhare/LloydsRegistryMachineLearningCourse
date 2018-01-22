@@ -15,27 +15,37 @@ numpy.random.seed(seed)
 train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
+# the number of images that will be processed in a single step
 batch_size=32
+# the size of the images that we'll learn on - we'll shrink them from the original size for speed
+image_size=(30, 100)
 
 train_generator = train_datagen.flow_from_directory(
         'data/train',
-        target_size=(30, 100),
+        target_size=image_size,
         batch_size=batch_size,
         class_mode='categorical')
 
+valid_generator = test_datagen.flow_from_directory(
+        'data/valid',
+        target_size=image_size,
+        batch_size=batch_size,
+        class_mode='categorical',
+        shuffle=False)
+
 test_generator = test_datagen.flow_from_directory(
         'data/test',
-        target_size=(30, 100),
+        target_size=image_size,
         batch_size=batch_size,
         class_mode='categorical',
         shuffle=False)
 
 num_classes = len(train_generator.class_indices)
 
-def larger_model():
+def larger_model(input_shape, num_classes):
 	# create model
 	model = Sequential()
-	model.add(Convolution2D(30, (5, 5), padding='valid', input_shape=train_generator.image_shape, activation='relu'))
+	model.add(Convolution2D(30, (5, 5), padding='valid', input_shape=input_shape, activation='relu'))
 	model.add(MaxPooling2D(pool_size=(2, 2)))
 	model.add(Convolution2D(15, (3, 3), activation='relu'))
 	model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -44,17 +54,19 @@ def larger_model():
 	model.add(Dense(128, activation='relu'))
 	model.add(Dense(50, activation='relu'))
 	model.add(Dense(num_classes, activation='softmax'))
-	# Compile model
-	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+	
 	return model
 
 # build the model
-model = larger_model()
+model = larger_model(train_generator.image_shape, num_classes)
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Fit the model
 model.fit_generator(
         train_generator,
-        steps_per_epoch=3869 // batch_size, 
+        steps_per_epoch=3474 // batch_size, 
+        validation_data=valid_generator,
+        validation_steps=395 // batch_size,
         epochs=10,
         verbose=1)
 

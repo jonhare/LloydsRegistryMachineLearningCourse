@@ -41,7 +41,7 @@ wget
 unzip data.zip
 ```
 
-We'll start by exploring the data, and look at how we can get that data loaded into memory through python code. If you open the data directory you should see two folders:
+We'll start by exploring the data, and look at how we can get that data loaded into memory through python code. If you open the data directory you should see three folders:
 	- The `train` folder contains the training data & is broken into subdirectories for each class. 
 	- The `valid` folder contains the validation data & is broken into subdirectories for each class. 
 	- The `test` folder contains the testing data & is broken into subdirectories for each class. 
@@ -90,27 +90,57 @@ You can see that accessing the dataset is quite easy. The most important caveat 
 
 ## A simple CNN for boat classification
 
-Now let's try something a little more challenging and take our _larger_ convolutional network from the experiments with mnist and apply it to the problem of boat classification. Firstly we need to setup the data for training (this time using the generator so we don't have to worry about memory usage), and it would also be sensible to load a smaller amount of data into memory for monitoring validation performance during training:
+Now let's try something a little more challenging and take our _larger_ convolutional network from the experiments with mnist and apply it to the problem of boat classification. Firstly we need to setup the data for training (this time using the generator so we don't have to worry about memory usage), and it would also be sensible to load the validation data to monitor performance during training, as well as load the test data:
 
 ```python
-import keras
-import matplotlib.pylab as plt
-from utils import generate_labelled_patches, load_labelled_patches, load_class_names
+import numpy
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras.layers import Flatten
+from keras.layers.convolutional import Convolution2D
+from keras.layers.convolutional import MaxPooling2D
+from keras.utils import np_utils
+ 
+# fix random seed for reproducibility
+seed = 7
+numpy.random.seed(seed)
 
-# define the patch size as a variable so its easier to change later. For now,
-# we'll set it to 28, just like the mnist images
-patch_size = 28
+train_datagen = ImageDataGenerator(rescale=1./255)
+test_datagen = ImageDataGenerator(rescale=1./255)
 
-# load data
-train_data = generate_labelled_patches(["SU4010"], patch_size, shuffle=True)
-valid_data = load_labelled_patches(["SU4011"], patch_size, limit=1000, shuffle=True)
+# the number of images that will be processed in a single step
+batch_size=32
+# the size of the images that we'll learn on - we'll shrink them from the original size for speed
+image_size=(30, 100)
 
-# load the class names
-clznames = load_class_names()
-num_classes = len(clznames)
+train_generator = train_datagen.flow_from_directory(
+        'data/train',
+        target_size=image_size,
+        batch_size=batch_size,
+        class_mode='categorical')
+
+valid_generator = test_datagen.flow_from_directory(
+        'data/valid',
+        target_size=image_size,
+        batch_size=batch_size,
+        class_mode='categorical',
+        shuffle=False)
+
+test_generator = test_datagen.flow_from_directory(
+        'data/test',
+        target_size=image_size,
+        batch_size=batch_size,
+        class_mode='categorical',
+        shuffle=False)
+
+num_classes = len(train_generator.class_indices)
 ```
 
-Note that we've loaded the training and validation data from different tiles to keep things fair. Now we can add the network definition from part 1. We'll make a slight change to the previous `larger_model()` function so that it allows us to specify the input and output sizes, and we'll also pull out the compile statement as it would be the same for many model architectures:
+Note that for now we're not using any data augmentation from the training data, however we've structured the code so that we can easily add it by manipulating the `ImageDataGenerator` that creates the `train_datagen` object. 
+
+Now we can add the network definition from part 1. We'll make a slight change to the previous `larger_model()` function so that it allows us to specify the input and output sizes, and we'll also pull out the compile statement as it would be the same for many model architectures:
 
 ```python
 from keras.models import Sequential
@@ -136,39 +166,45 @@ def larger_model(input_shape, num_classes):
 	return model
 
 # build the model
-model = larger_model(valid_data[0][0].shape, num_classes)
+model = larger_model(train_generator.image_shape, num_classes)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 ```
 
-Specifying the input shape using the shape of the first validation instance allows us to avoid having to worry about how the backend is storing the patches (if we were using theano conventions it would be `(3,patch_size,patch_size)`, whereas with tensorflow it would be `(patch_size,patch_size,3`). We're now in a position to add the code to fit the model. Because this time we're loading the data using a generator rather than statically we use the `fit_generator()` method instead of `fit`:
+Specifying the input shape using the shape given by the `train_generator.image_shape` allows us to avoid having to worry about how the backend is storing the images. We're now in a position to add the code to fit the model. Because this time we're loading the data using a generator rather than statically we use the `fit_generator()` method instead of `fit`:
 
 ```python
 # Fit the model
-model.fit_generator(train_data, steps_per_epoch=313, epochs=10, validation_data=valid_data, verbose=1)
+# Fit the model
+model.fit_generator(
+        train_generator,
+        steps_per_epoch=3474 // batch_size, 
+        validation_data=valid_generator,
+        validation_steps=395 // batch_size,
+        epochs=10,
+        verbose=1)
 ```
 
-We've specified 313 `steps_per_epoch` to keep computation time down; this is the number of batches that will be processed in each epoch. In actuallity if we want to sample all patches from a single tile in an epoch (assuming a 1px step), there are `(4000-patch_size)**2` samples available to us. This is a rather large number and will take a significant amount of time - in fact for reasonable patch sizes this is approaching the total size of the ImageNet data from just one tile! Note that by having a smaller number of samples per epoch than in the actual data that each epoch will end up having a different sample of training data to work with.
+We've specified `3474 // batch_size` `steps_per_epoch` to indicate that we want all images (there are 3474 training images) to be processed each epoch (each step within an epoch will process a single batch worth of images). The same applies for the `validation_steps`.
 
-Finally, before we try running this model, lets add the code to load samples from another tile and make and display some classifications:
+Finally, before we try running this model, lets make use of the test data and print a classification report using scikit-learn:
 
 ```python
-from keras import backend as K
+# Final evaluation of the model
+# Compute the number of epochs required so we see all data:
+test_steps_per_epoch = numpy.math.ceil(float(test_generator.samples) / test_generator.batch_size)
+# perform prediction:
+raw_predictions = model.predict_generator(test_generator, steps=test_steps_per_epoch)
+# convert predictions from one-hot to indices
+predictions = numpy.argmax(raw_predictions, axis=1)
 
-# load 4 randomly selected patches and their labels
-(X_test, y_test_true) = load_labelled_patches(["SU4012"], patch_size, limit=4, shuffle=True)
-y_test = model.predict_classes(X_test)
+print("Prediction Distribution:  " + numpy.bincount(test_generator.classes))
+print("Groundtruth Distribution: " + numpy.bincount(predictions))
 
-#if we're using the theano backend, we need to change indexing order for matplotlib to interpret the patches:
-if K.image_dim_ordering() == 'th':
-	X_test = X_test.transpose(0, 2, 3, 1)
-
-# plot 4 images
-for i in xrange(0,4):
-	plt.subplot(2,2,i+1).set_title(clznames[y_test[i]] + "\n" + clznames[y_test_true[i].argmax()])
-	plt.imshow(X_test[i])
-
-# show the plot
-plt.show()
+from sklearn import metrics
+#get a list of classes (this basically ensures that the list is in the correct order by index):
+class_labels = [item[0] for item in sorted(generator.class_indices.items(), key=lambda x: x[1])] 
+#print the report
+print(metrics.classification_report(test_generator.classes, predictions, target_names=class_labels))
 ```
 
 Running this should result in the following:
