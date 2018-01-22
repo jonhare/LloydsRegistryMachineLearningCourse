@@ -43,6 +43,7 @@ unzip data.zip
 
 We'll start by exploring the data, and look at how we can get that data loaded into memory through python code. If you open the data directory you should see two folders:
 	- The `train` folder contains the training data & is broken into subdirectories for each class. 
+	- The `valid` folder contains the validation data & is broken into subdirectories for each class. 
 	- The `test` folder contains the testing data & is broken into subdirectories for each class. 
 
 The keras library has support for directly reading images from a directory structure like the one we have using the `ImageDataGenerator` class. In addition to loading the images directly, keras provides a mechanism to dynamically augment the data being read by applying random transformations (flipping, rotating, etc), as well as cropping and scaling the images. The following code will generate a visualisation of the first batch of images produced by the generator:
@@ -83,15 +84,13 @@ plt.show()
 plt.savefig("batch.png")
 ```
 
-You can see that accessing the dataset is quite easy: the first argument to the `load_labelled_patches` function specifies a list of tiles to load from; the second specifies how big the patches are, the optional `limit` argument ensures we only load 4 patches, and the optional `shuffle` argument tells the function to pick the patches randomly rather than in scan order. Running the above example, you should see something like the image below (obviously you'll get different patches because of the shuffling).
+You can see that accessing the dataset is quite easy. The most important caveat of using the `ImageDataGenerator` comes when we are using it to load the test data - in such a case we need to ensure that no augmentation happens (other than the resizing of inputs through the `target_size` attribute of `flow_from_directory`), and that the `shuffle` attribute of `flow_from_directory` is `False`, to ensure that we can compare the true labels and target labels correctly.
 
-![Examples from the SU41 dataset](https://github.com/jonhare/os-deep-learning-labs/raw/master/part2/images/vis.png "Examples from the SU41 dataset")
+![Examples from the dataset](https://raw.githubusercontent.com/jonhare/LloydsRegistryMachineLearningCourse/master/Thursday/practical-part2/batch.png "Examples from the dataset")
 
-> __Exercise:__ Have a play with the above code and explore the other parameters of the `load_labelled_patches` function. What happens when you disable shuffle and alter the step size?
+## A simple CNN for boat classification
 
-## A simple CNN for theme classification
-
-Now let's try something a little more challenging and take our _larger_ convolutional network from the experiments with mnist and apply it to the problem of theme classification. Firstly we need to setup the data for training (this time using the generator so we don't have to worry about memory usage), and it would also be sensible to load a smaller amount of data into memory for monitoring validation performance during training:
+Now let's try something a little more challenging and take our _larger_ convolutional network from the experiments with mnist and apply it to the problem of boat classification. Firstly we need to setup the data for training (this time using the generator so we don't have to worry about memory usage), and it would also be sensible to load a smaller amount of data into memory for monitoring validation performance during training:
 
 ```python
 import keras
