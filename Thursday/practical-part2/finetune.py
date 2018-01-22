@@ -39,15 +39,15 @@ test_generator = test_datagen.flow_from_directory(
 num_classes = len(train_generator.class_indices)
 
 def hack_resnet(input_size, num_classes):
-	base_model = ResNet50(include_top=False, weights='imagenet', input_shape=input_size)
-	x = base_model.output
-	x = Flatten()(x)
+    base_model = ResNet50(include_top=False, weights='imagenet', input_shape=input_size)
+    x = base_model.output
+    x = Flatten()(x)
     x = Dense(classes, activation='softmax', name='fc1000')(x)
-   	
-   	# this is the model we will train
-	newmodel = Model(inputs=base_model.input, outputs=predictions)
+    
+    # this is the model we will train
+    newmodel = Model(inputs=base_model.input, outputs=predictions)
 
-	return newmodel
+    return newmodel
 
 model = hack_resnet(train_generator.image_shape, num_classes)
 
