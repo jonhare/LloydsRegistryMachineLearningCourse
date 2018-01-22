@@ -300,8 +300,19 @@ print('Predicted:', decode_predictions(preds))
 If we run this (it will take a little longer the first time as the model is downloaded), it should print the following:
 
 	Using TensorFlow backend.
-	K.image_dim_ordering: tf
-	('Predicted:', [[(u'n02640242', u'sturgeon', 0.35990164), (u'n02641379', u'gar', 0.3399567), (u'n02514041', u'barracouta', 0.26639012), (u'n02536864', u'coho', 0.028537149), (u'n01484850', u'great_white_shark', 0.0025088955)]])
+	2018-01-22 20:16:24.976367: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-22 20:16:24.976402: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-22 20:16:25.229794: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+	2018-01-22 20:16:25.230492: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+	name: GeForce GTX TITAN X
+	major: 5 minor: 2 memoryClockRate (GHz) 1.076
+	pciBusID 0000:02:00.0
+	Total memory: 11.92GiB
+	Free memory: 11.80GiB
+	2018-01-22 20:16:25.230515: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+	2018-01-22 20:16:25.230527: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+	2018-01-22 20:16:25.230537: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
+	24576/35363 [===================>..........] - ETA: 0s('Predicted:', [[(u'n02640242', u'sturgeon', 0.70169324), (u'n02641379', u'gar', 0.16568515), (u'n02514041', u'barracouta', 0.095400475), (u'n02536864', u'coho', 0.032304522), (u'n01484850', u'great_white_shark', 0.0041837287)]])
 
 Indicating that our input image was likely to contain a fish!
 
