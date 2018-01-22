@@ -45,7 +45,7 @@ def hack_resnet(input_size, num_classes):
     x = Dense(num_classes, activation='softmax', name='fc1000')(x)
     
     # this is the model we will train
-    newmodel = Model(inputs=base_model.input, outputs=predictions)
+    newmodel = Model(inputs=base_model.input, outputs=x)
 
     return newmodel
 
