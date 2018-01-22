@@ -4,7 +4,7 @@ from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from keras.models import Model
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input, Flatten
 from keras import optimizers
 
 # load data
