@@ -280,14 +280,14 @@ Training a network from scratch can be a lot of work. Is there some way we could
 Let's try this in practice - we'll start by loading a pre-trained network architecture called a Deep Residual Network (or ResNet for short) that has been trained on the 1000-class ImageNet dataset. The ResNet architecture is very deep - it has many (in our case 50) convolutional layers and is currently one of the best performing architectures on the ImageNet challenge. Keras contains code that implements the resnet50 architecture, and automatically downloads the pre-trained model weights. We'll start by using this to load the model and test it by classifying an image:
 
 ```python
-from resnet50 import ResNet50
+from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import preprocess_input, decode_predictions
 from keras.preprocessing import image
-from imagenet_utils import decode_predictions, preprocess_input
 import numpy as np
 
 model = ResNet50(include_top=True, weights='imagenet')
 
-img_path = 'images/mf.jpg'
+img_path = 'data/mf.jpg'
 img = image.load_img(img_path, target_size=(224, 224))
 x = image.img_to_array(img)
 x = np.expand_dims(x, axis=0)
