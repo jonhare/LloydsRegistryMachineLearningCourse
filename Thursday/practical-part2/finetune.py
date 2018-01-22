@@ -6,26 +6,6 @@ from keras.models import Model
 from keras.layers import Dense, Input
 from keras import optimizers
 
-# load the class names
-clznames = load_class_names()
-num_classes = len(clznames)
-
-def hack_resnet(num_classes):
-	model = ResNet50(include_top=True, weights='imagenet')
-
-	# Get input
-	new_input = model.input
-	# Find the layer to connect
-	hidden_layer = model.layers[-2].output
-	# Connect a new layer on it
-	new_output = Dense(num_classes) (hidden_layer)
-	# Build a new model
-	newmodel = Model(new_input, new_output)
-
-	return newmodel
-
-model = hack_resnet(num_classes)
-
 # the resnet expects 224x224 inputs
 patch_size = 224
 
@@ -57,6 +37,24 @@ test_generator = test_datagen.flow_from_directory(
         batch_size=batch_size,
         class_mode='categorical',
         shuffle=False)
+
+num_classes = len(train_generator.class_indices)
+
+def hack_resnet(num_classes):
+	model = ResNet50(include_top=True, weights='imagenet')
+
+	# Get input
+	new_input = model.input
+	# Find the layer to connect
+	hidden_layer = model.layers[-2].output
+	# Connect a new layer on it
+	new_output = Dense(num_classes) (hidden_layer)
+	# Build a new model
+	newmodel = Model(new_input, new_output)
+
+	return newmodel
+
+model = hack_resnet(num_classes)
 
 # set weights in all but last layer
 # to non-trainable (weights will not be updated)
