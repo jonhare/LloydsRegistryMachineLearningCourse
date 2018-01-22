@@ -202,7 +202,7 @@ print("Groundtruth Distribution: " + numpy.bincount(predictions))
 
 from sklearn import metrics
 #get a list of classes (this basically ensures that the list is in the correct order by index):
-class_labels = [item[0] for item in sorted(generator.class_indices.items(), key=lambda x: x[1])] 
+class_labels = [item[0] for item in sorted(test_generator.class_indices.items(), key=lambda x: x[1])] #get a list of classes
 #print the report
 print(metrics.classification_report(test_generator.classes, predictions, target_names=class_labels))
 ```

@@ -79,5 +79,5 @@ print("Prediction Distribution:  " + str(numpy.bincount(test_generator.classes))
 print("Groundtruth Distribution: " + str(numpy.bincount(predictions)))
 
 from sklearn import metrics
-class_labels = [item[0] for item in sorted(generator.class_indices.items(), key=lambda x: x[1])] #get a list of classes
+class_labels = [item[0] for item in sorted(test_generator.class_indices.items(), key=lambda x: x[1])] #get a list of classes
 print(metrics.classification_report(test_generator.classes, predictions, target_names=class_labels))
