@@ -1,6 +1,7 @@
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input, decode_predictions
 from keras.preprocessing import image
+from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from keras.models import Model
 from keras.layers import Dense, Input
