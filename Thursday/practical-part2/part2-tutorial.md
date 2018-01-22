@@ -210,107 +210,74 @@ print(metrics.classification_report(test_generator.classes, predictions, target_
 Running this should result in the following:
 
 	Using TensorFlow backend.
+	Found 3474 images belonging to 16 classes.
+	Found 395 images belonging to 16 classes.
+	Found 1324 images belonging to 16 classes.
 	Epoch 1/10
-	10016/10016 [==============================] - 25s - loss: 0.9179 - acc: 0.7318 - val_loss: 0.6572 - val_acc: 0.8310
+	2018-01-22 20:04:10.049850: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-22 20:04:10.049882: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+	2018-01-22 20:04:10.318579: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+	2018-01-22 20:04:10.319339: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+	name: GeForce GTX TITAN X
+	major: 5 minor: 2 memoryClockRate (GHz) 1.076
+	pciBusID 0000:02:00.0
+	Total memory: 11.92GiB
+	Free memory: 11.80GiB
+	2018-01-22 20:04:10.319363: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+	2018-01-22 20:04:10.319372: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+	2018-01-22 20:04:10.319382: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
+	108/108 [==============================] - 16s - loss: 1.5000 - acc: 0.5810 - val_loss: 1.2083 - val_acc: 0.6458
 	Epoch 2/10
-	10016/10016 [==============================] - 7s - loss: 0.6426 - acc: 0.8190 - val_loss: 0.6077 - val_acc: 0.8490
+	108/108 [==============================] - 14s - loss: 0.9916 - acc: 0.7089 - val_loss: 1.0109 - val_acc: 0.6953
 	Epoch 3/10
-	10016/10016 [==============================] - 7s - loss: 0.6037 - acc: 0.8259 - val_loss: 0.5387 - val_acc: 0.8500
+	108/108 [==============================] - 15s - loss: 0.8990 - acc: 0.7267 - val_loss: 0.9910 - val_acc: 0.6979
 	Epoch 4/10
-	10016/10016 [==============================] - 7s - loss: 0.5786 - acc: 0.8242 - val_loss: 0.5549 - val_acc: 0.8550
+	108/108 [==============================] - 14s - loss: 0.8057 - acc: 0.7448 - val_loss: 0.9089 - val_acc: 0.7057
 	Epoch 5/10
-	10016/10016 [==============================] - 7s - loss: 0.5646 - acc: 0.8359 - val_loss: 0.5586 - val_acc: 0.8520
+	108/108 [==============================] - 15s - loss: 0.7490 - acc: 0.7596 - val_loss: 0.8997 - val_acc: 0.7109
 	Epoch 6/10
-	10016/10016 [==============================] - 7s - loss: 0.5355 - acc: 0.8404 - val_loss: 0.5150 - val_acc: 0.8560
+	108/108 [==============================] - 14s - loss: 0.7212 - acc: 0.7685 - val_loss: 0.8566 - val_acc: 0.7344
 	Epoch 7/10
-	10016/10016 [==============================] - 7s - loss: 0.5466 - acc: 0.8334 - val_loss: 0.4932 - val_acc: 0.8550
+	108/108 [==============================] - 15s - loss: 0.6559 - acc: 0.7814 - val_loss: 0.8229 - val_acc: 0.7474
 	Epoch 8/10
-	10016/10016 [==============================] - 7s - loss: 0.5469 - acc: 0.8352 - val_loss: 0.5890 - val_acc: 0.8580
+	108/108 [==============================] - 15s - loss: 0.5935 - acc: 0.8124 - val_loss: 0.7744 - val_acc: 0.7422
 	Epoch 9/10
-	10016/10016 [==============================] - 7s - loss: 0.5180 - acc: 0.8427 - val_loss: 0.5248 - val_acc: 0.8610
+	108/108 [==============================] - 14s - loss: 0.5697 - acc: 0.8118 - val_loss: 0.8121 - val_acc: 0.7578
 	Epoch 10/10
-	10016/10016 [==============================] - 7s - loss: 0.5025 - acc: 0.8481 - val_loss: 0.5215 - val_acc: 0.8550
+	108/108 [==============================] - 14s - loss: 0.5146 - acc: 0.8290 - val_loss: 0.8322 - val_acc: 0.7552
+	Prediction Distribution:  [ 19  22  51   3   7  59   3   1 274  74  15  19   3  29 325 420]
+	Groundtruth Distribution: [ 16  12  21   1   0  58   3   1 298 164  10  25   0   5 334 376]
+	/usr/local/lib/python2.7/dist-packages/sklearn/metrics/classification.py:1113: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+	  'precision', 'predicted', average, warn_for)
+	                         precision    recall  f1-score   support
 
-with a set of sample predictions that looks something like this:
+	              Alilaguna       0.88      0.74      0.80        19
+	              Ambulanza       0.50      0.27      0.35        22
+	               Barchino       0.19      0.08      0.11        51
+	                Gondola       0.00      0.00      0.00         3
+	          Lanciafino10m       0.00      0.00      0.00         7
+	              Motobarca       0.26      0.25      0.26        59
+	Motopontonerettangolare       0.33      0.33      0.33         3
+	          MotoscafoACTV       1.00      1.00      1.00         1
+	               Mototopo       0.78      0.85      0.81       274
+	              Patanella       0.34      0.76      0.47        74
+	                Polizia       0.20      0.13      0.16        15
+	        Raccoltarifiuti       0.20      0.26      0.23        19
+	           Sandoloaremi       0.00      0.00      0.00         3
+	                   Topa       0.40      0.07      0.12        29
+	          VaporettoACTV       0.97      0.99      0.98       325
+	                  Water       0.98      0.88      0.92       420
 
-![Example classifications](https://github.com/jonhare/os-deep-learning-labs/raw/master/part2/images/cnn1-class.png "Example classifications")
+	            avg / total       0.78      0.78      0.77      1324
 
-In this particular case the overall accuracies are all quite high (in terms of both training and validation), which is pleasing. Be aware though that we're using a relatively small set of both training and validation data, and that there is a very high bias in the class distribution which inevitably could lead to higher accuracies because of common classes.
+In this particular case the overall accuracies are a bit mixed; whist the average is high, it is clear that our model doesnt work well for some classes. Be aware though that we're using a relatively small set of both training and validation data, and that there is a very high bias in the class distribution which inevitably could lead to higher accuracies because of common classes. As we mentioned in the first tutorial, this network architecture isn't any thing like one that has won the image classificiation challenges.
 
 > __Exercise:__ Have a play with the above code and explore the effect of patch size and the amount of training and validation data.
 
-## Mapping the classifications
-Now we can make predictions for a tile it would be quite nice to make a modification so that we can try and reconstruct theme maps directly from the 3-band images. This is often called semantic segmentation. An easy approach that we can take is to take spatially sequential patches, and reconstruct an "image" based on the class assignments. This is effective, but highly computationally inefficient - better approaches are to convert the network to be fully convolutional (see e.g. https://devblogs.nvidia.com/parallelforall/image-segmentation-using-digits-5/#comment-1891), or to use a specialist type of network that actually outputs segmentation maps directly (usually these networks are based on layers of downsampling convolutions like we're using in our network, followed by layers of upsampling or deconvolution which aim to increase the spatial resolution back up to the size of the input). 
-
-For now, let's implement the naive approach by building a theme map for some test data. We'll keep the same code as above, but modify the parts involving the test data as follows:
-
-```python
-import numpy as np
-
-# load some test data; this time we specifically load patches from a 300x300 square of a tile in scan-order
-test_data = load_labelled_patches(["SU4012"], patch_size, subcoords=((0,0), (300,300)))
-
-# we can reshape the test data labels back into an image and save it
-tmp = np.zeros(test_data[1].shape[0])
-for x in xrange(0, test_data[1].shape[0]):
-	tmp[x] = test_data[1][x].argmax()
-tmp = tmp.reshape((300-patch_size, 300-patch_size))
-plt.figure()
-plt.imshow(tmp)
-plt.savefig("test_gt.png")
-
-# and we can do the same for the predictions
-clzs = model.predict_classes(test_data[0])
-clzs = clzs.reshape((300-patch_size, 300-patch_size))
-plt.figure()
-plt.imshow(clzs)
-plt.savefig("test_pred.png")
-```
-
-If we now run this, we'll get a "ground-truth" image that looks like this:
-
-![Test ground-truth theme map](https://github.com/jonhare/os-deep-learning-labs/raw/master/part2/images/test_gt.png "Test ground-truth theme map")
-
-and a "predictions" image that looks something like this (results will vary depending on the sample of data used for training):
-
-![Test predictions theme map](https://github.com/jonhare/os-deep-learning-labs/raw/master/part2/images/test_pred.png "Test predictions theme map")
-
-In this case we can see that the result is not particularly good, although undoubtedly this is due to the tiny amount of training our network has had as well as the fact that our predictions are entirely based on looking at a 28x28 pixel window of the image (bearing in mind that this is only 7m x 7m on the ground, which is pretty tiny and obviously fails to capture any context from the surroundings). 
-
-One additional change we might like to make to our code is to add a "callback" that produces and saves a theme-map for the validation data after each epoch; this will allow us to visually monitor how the network is learning. Firstly we need to modify the validation data to be loaded from a region of a tile in scan order rather than from random sampling:
-
-```python
-valid_data = load_labelled_patches(["SU4011"], patch_size, subcoords=((0,0), (300,300)))
-```
-
-Next we need to define the callback by extending the `keras.callbacks.Callback` class, and implement the `on_epoch_end` method to make predictions on the validation data, reformat them into an image and save the result:
-
-```python
-class DisplayMap(keras.callbacks.Callback):
-	def on_epoch_end(self, epoch, logs={}):
-		clzs = model.predict_classes(valid_data[0])
-		clzs = clzs.reshape((300-patch_size, 300-patch_size))
-		plt.figure()
-		plt.imshow(clzs)
-		plt.savefig("map_epoch%s.png" % epoch)
-```
-
-Finally, we need to modify the call to `fit_generator` to include the callback:
-
-```python
-model.fit_generator(train_data, steps_per_epoch=313, epochs=10, validation_data=valid_data, verbose=1, callbacks=[DisplayMap()])
-```
-
-If we run the code now after each epoch has passed an image will be saved. Here's the image from the first epoch:
-
-![Epoch 1 theme map](https://github.com/jonhare/os-deep-learning-labs/raw/master/part2/images/map_epoch0.png "Epoch 1 theme map")
-
-> __Exercise:__ It's a little difficult to interpret whether the above validation theme map is actually any good because we don't exactly know what it should look like (we can compare against the ground-truth in the data directory, but this is a different size). Add some additional code to save the validation data ground-truth theme map before training starts so we have something to compare against.
-
 ## Using a better network model - transferring and finetuning a pretrained ResNet
-Training a network from scratch can be a lot of work. Is there some way we could take an existing network trained on some data with one set of labels, and adapt it to work on a different data set with different labels? Assuming that the inputs of the network are equivalent (for example, image with the same number of bands and size), then the answer is an emphatic yes! This process of "finetuning" a pre-trained network has become common-place as its much faster an easier than starting from scratch. 
+Training a network from scratch can be a lot of work. Is there some way we could take an existing network trained on some data with one set of labels, and adapt it to work on a different data set with different labels? Assuming that the inputs of the network are equivalent (for example, image with the same number of bands and size), then the answer is an emphatic yes! This process of "finetuning" a pre-trained network has become common-place as its much faster an easier than starting from scratch. This approach will also help us better work with the small amount of data that we have to train with.
 
-Let's try this in practice - we'll start by loading a pre-trained network architecture called a Deep Residual Network (or ResNet for short) that has been trained on the 1000-class ImageNet dataset. The ResNet architecture is very deep - it has many (in our case 50) convolutional layers and is currently one of the best performing architectures on the ImageNet challenge. The tutorial git repo contains code that implements the resnet50 architecture, and automatically downloads the pre-trained model weights. We'll start by using this to load the model and test it by classifying an image:
+Let's try this in practice - we'll start by loading a pre-trained network architecture called a Deep Residual Network (or ResNet for short) that has been trained on the 1000-class ImageNet dataset. The ResNet architecture is very deep - it has many (in our case 50) convolutional layers and is currently one of the best performing architectures on the ImageNet challenge. Keras contains code that implements the resnet50 architecture, and automatically downloads the pre-trained model weights. We'll start by using this to load the model and test it by classifying an image:
 
 ```python
 from resnet50 import ResNet50
