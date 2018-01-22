@@ -58,7 +58,7 @@ for layer in model.layers[:len(model.layers)-2]:
 
 # compile the model with a SGD/momentum optimizer
 # and a very slow learning rate.
-model.compile(loss='binary_crossentropy',
+model.compile(loss='categorical_crossentropy',
               optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
               metrics=['accuracy'])
 
@@ -76,8 +76,8 @@ test_steps_per_epoch = numpy.math.ceil(float(test_generator.samples) / test_gene
 raw_predictions = model.predict_generator(test_generator, steps=test_steps_per_epoch)
 predictions = numpy.argmax(raw_predictions, axis=1)
 
-print("Prediction Distribution:  " + str(numpy.bincount(test_generator.classes)))
-print("Groundtruth Distribution: " + str(numpy.bincount(predictions)))
+print("Prediction Distribution:  " + str(numpy.bincount(predictions)))
+print("Groundtruth Distribution: " + str(numpy.bincount(test_generator.classes)))
 
 from sklearn import metrics
 class_labels = [item[0] for item in sorted(test_generator.class_indices.items(), key=lambda x: x[1])] #get a list of classes

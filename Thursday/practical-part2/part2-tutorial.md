@@ -197,8 +197,8 @@ raw_predictions = model.predict_generator(test_generator, steps=test_steps_per_e
 # convert predictions from one-hot to indices
 predictions = numpy.argmax(raw_predictions, axis=1)
 
-print("Prediction Distribution:  " + numpy.bincount(test_generator.classes))
-print("Groundtruth Distribution: " + numpy.bincount(predictions))
+print("Prediction Distribution:  " + str(numpy.bincount(predictions)))
+print("Groundtruth Distribution: " + str(numpy.bincount(test_generator.classes)))
 
 from sklearn import metrics
 #get a list of classes (this basically ensures that the list is in the correct order by index):
@@ -321,25 +321,24 @@ Indicating that our input image was likely to contain a fish!
 We're now in a position to start to hack the model structure. Fundamentally we need to first remove the classification layer at the end of the model and replace it with a new one (with a different number of classes):
 
 ```python
-def hack_resnet(num_classes):
-	model = ResNet50(include_top=True, weights='imagenet')
+def hack_resnet(input_size, num_classes):
+    base_model = ResNet50(include_top=False, weights='imagenet', input_shape=input_size)
+    x = base_model.output
+    x = Flatten()(x)
+    x = Dense(num_classes, activation='softmax', name='fc1000')(x)
+    
+    # this is the model we will train
+    newmodel = Model(inputs=base_model.input, outputs=x)
 
-	# Get input
-	new_input = model.input
-	# Find the layer to connect
-	hidden_layer = model.layers[-2].output
-	# Connect a new layer on it
-	new_output = Dense(num_classes) (hidden_layer)
-	# Build a new model
-	newmodel = Model(new_input, new_output)
+    return newmodel
 
-	return newmodel
+model = hack_resnet(train_generator.image_shape, num_classes)
 ```
 
 The actual process of finetuning involves us now training the model with our own data. This is as simple as compiling the model and running the `fit` or `fit_generator` methods as before. As the network is already largely trained, we'll likely want to use a small learning rate so not to make big changes in weights:
 
 ```python
-model.compile(loss='binary_crossentropy',
+model.compile(loss='categorical_crossentropy',
               optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
               metrics=['accuracy'])
 ```
@@ -355,54 +354,43 @@ for layer in model.layers[:len(model.layers)-2]:
 
 If we have lots of training data we could then unlock these layers and perform end-to-end finetuning afterwards. The Standford CS231n course pages have lots of useful hints on fine-tuning: http://cs231n.github.io/transfer-learning/
 
-> __Exercise:__ try finetuning the resnet50 with the theme data. You'll need a GPU to do this effectively as it's _very_ slow! 
+> __Exercise:__ try finetuning the resnet50 with the boat data. You'll need a GPU to do this effectively as it's _rather_ slow! Note that you should set the image_size to be (240, 800) as the resnet has minimum size limits on which it can operate.
 
 ## Extracting features from a model
 
 Sometimes you want to do things that are not so easily accomplished with a deep network. You might want to build classifiers using very small amounts of data, or you might want a way of finding things in photographs that are in some way semantically similar, but don't have exactly the same classes. CNNs can actually help here using a technique known often called transfer learning (and related to the fine tuning that we just looked at). If we assume we have a trained network, then by extracting vectors from the layers before the final classifier we should have a means of achieving these tasks, as the vectors are likely to strongly encode semantic information about the content of the input image. If we wanted to quickly train new classifiers for new classes, we could for instance just use a relatively simple linear classifier trained on these vectors. If we wanted to find semantically similar images, we could just compare the Euclidean distance of these vectors.
 
-Keras makes it pretty easy to get these vector representations. First we have to remove the end of out network to the point we with to extract the features - for example in the resnet we might want features from the final flatten layer before the final dense connections (this gives us a 2048 dimensional vector from every 224x224 dimensional inout image):
+Keras makes it pretty easy to get these vector representations. The following code gets a resnet model in which the a feature vector is computed from the penultimate layer of the network by applying a _global average pooling_ operation over the feature maps:
 
 ```python
-model = ResNet50(include_top=True, weights='imagenet')
-
-# Get input
-new_input = model.input
-
-# Find the layer to end on
-new_output = model.layers[-2].output
-
-# Build a new model
-newmodel = Model(new_input, new_output)
+model = ResNet50(include_top=False,
+            weights='imagenet',
+            pooling='avg')
 ```
 
-With this model, we can use the `predict()` method to extract the features for some inputs. To demonstrate, we can put the whole thing together and generate some vectors from some samples of our 3-band images
+With this model, we can use the `predict()` method to extract the features for some inputs. To demonstrate, we can put the whole thing together and generate a vector from an image
 
 ```python
-from resnet50 import ResNet50
-from imagenet_utils import preprocess_input
+from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import preprocess_input
 from keras.models import Model
-from utils import load_labelled_patches
+from keras.preprocessing import image
+import numpy as np
 
+model = ResNet50(include_top=False,
+            weights='imagenet',
+            pooling='avg')
 
-model = ResNet50(include_top=True, weights='imagenet')
+img_path = 'data/test/Alilaguna/20130412_064059_20202.jpg'
+img = image.load_img(img_path, target_size=(240, 800))
 
-# Get input
-new_input = model.input
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+features = model.predict(x)
 
-# Find the layer to end on
-new_output = model.layers[-2].output
-
-# Build a new model
-newmodel = Model(new_input, new_output)
-
-(X, y_test_true) = load_labelled_patches(["SU4012"], 224, limit=4, shuffle=True)
-X = preprocess_input(X)
-
-features = newmodel.predict(X)
-
-print features.shape
-print features
+print(features.shape)
+print(features)
 ```
 
 (Obviously this will be more effective if the network has been trained or fine-tuned on the same kind of data that we're extracting features from.)
