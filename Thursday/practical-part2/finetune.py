@@ -42,7 +42,7 @@ def hack_resnet(input_size, num_classes):
     base_model = ResNet50(include_top=False, weights='imagenet', input_shape=input_size)
     x = base_model.output
     x = Flatten()(x)
-    x = Dense(classes, activation='softmax', name='fc1000')(x)
+    x = Dense(num_classes, activation='softmax', name='fc1000')(x)
     
     # this is the model we will train
     newmodel = Model(inputs=base_model.input, outputs=predictions)
