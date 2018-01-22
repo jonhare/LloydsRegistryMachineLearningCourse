@@ -11,8 +11,8 @@ from keras import optimizers
 patch_size = 224
 
 # load data
-train_datagen = ImageDataGenerator(rescale=1./255)
-test_datagen = ImageDataGenerator(rescale=1./255)
+train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
 # the number of images that will be processed in a single step
 batch_size=32
