@@ -314,7 +314,7 @@ If we run this (it will take a little longer the first time as the model is down
 	2018-01-22 20:16:25.230537: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:02:00.0)
 	24576/35363 [===================>..........] - ETA: 0s('Predicted:', [[(u'n02640242', u'sturgeon', 0.70169324), (u'n02641379', u'gar', 0.16568515), (u'n02514041', u'barracouta', 0.095400475), (u'n02536864', u'coho', 0.032304522), (u'n01484850', u'great_white_shark', 0.0041837287)]])
 
-Indicating that our input image was likely to contain a fish!
+Indicating that our input image was likely to contain a fish! The `preprocess_input` function is important - it's responsible for applying the same operations to out input image as were applied to the images when the network was trained.
 
 > __Exercise:__ try the model with some of your own images
 
@@ -354,7 +354,7 @@ for layer in model.layers[:len(model.layers)-2]:
 
 If we have lots of training data we could then unlock these layers and perform end-to-end finetuning afterwards. The Standford CS231n course pages have lots of useful hints on fine-tuning: http://cs231n.github.io/transfer-learning/
 
-> __Exercise:__ try finetuning the resnet50 with the boat data. You'll need a GPU to do this effectively as it's _rather_ slow! Note that you should set the image_size to be (240, 800) as the resnet has minimum size limits on which it can operate.
+> __Exercise:__ try finetuning the resnet50 with the boat data. You'll need a GPU to do this effectively as it's _rather_ slow! Note that you should set the image_size to be (240, 800) as the resnet has minimum size limits on which it can operate. You'll also need to adjust the input images by applying the `preprocess_input` function - you can modify both `ImageDataGenerator` constructor calls to `ImageDataGenerator(preprocessing_function=preprocess_input)` to achieve this.
 
 ## Extracting features from a model
 
@@ -396,3 +396,6 @@ print(features)
 (Obviously this will be more effective if the network has been trained or fine-tuned on the same kind of data that we're extracting features from.)
 
 > __Exercise:__ try generating some features for different patches and calculating the Euclidean distances between these features. How do the Euclidean distances compare to your perception of similarity between the patches?
+
+> __Exercise:__ Can you train a set of SVMs to learn the boat classes using the features extracted by a ResNet? How does the performance compare to the finetuned ResNet? What's the difference in runtime?
+
