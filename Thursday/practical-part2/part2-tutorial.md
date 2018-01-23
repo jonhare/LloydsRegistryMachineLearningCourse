@@ -30,18 +30,18 @@ You'll need access to a computer with the following installed:
 - `NumPy` (>= 1.12.1)
 - `SciPy` (>= 0.19.1)
 - `scikit-learn` (>= 0.19.1)
-- `opencv`
 - `pillow` (>=4.0.0)
 
 ## Getting started 
 Start by downloading and unzipping the data set:
 
 ```
-wget
-unzip data.zip
+wget https://artist-cloud.ecs.soton.ac.uk/s/wyxs7b59Ohr9LaT/download
+unzip boat-data.zip
 ```
 
 We'll start by exploring the data, and look at how we can get that data loaded into memory through python code. If you open the data directory you should see three folders:
+
 	- The `train` folder contains the training data & is broken into subdirectories for each class. 
 	- The `valid` folder contains the validation data & is broken into subdirectories for each class. 
 	- The `test` folder contains the testing data & is broken into subdirectories for each class. 
