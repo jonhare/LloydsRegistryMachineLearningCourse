@@ -40,9 +40,7 @@ You'll need access to a computer with the following installed:
 - `SciPy` (>= 0.19.1)
 - `scikit-learn` (>= 0.19.1)
 
-If you've installed the base Anaconda python distribution, then running `conda install keras` will install both keras and tensorflow. 
-
-For the purposes of the doing the tutorial in the lab, we'll provide shell access to a purpose built deep-learning machine with these pre-installed. The machine has an i7 with 4 physical cores (8 with hyperthreading), 32G RAM and a Maxwell-generation nvidia Titan X GPU with 3072 cores and 12G RAM. 
+If you've installed the base Anaconda python distribution, then running `conda install keras` will install both keras and tensorflow. You can make a start on this tutorial using you own machines, however you'll find that the code runs rather slowly. To run at more sensible speeds you need access to a machine with a powerful GPU (or GPUs).
 
 ## The MNIST Dataset
 MNIST is a dataset developed by Yann LeCun, Corinna Cortes and Christopher Burges for evaluating machine learning models on the handwritten digit classification problem.
